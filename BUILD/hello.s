@@ -367,15 +367,16 @@ L0011:	jsr     _ppu_wait_frame
 ; if(i&PAD_A)
 ;
 	and     #$80
-<<<<<<< HEAD
-	jeq     L0041
-=======
-	jeq     L0036
+	jeq     L0043
+;
+; ppu_off();
+;
+	jsr     _ppu_off
 ;
 ; if(k==0){
 ;
 	lda     _k
-	bne     L0032
+	bne     L003B
 ;
 ; music_play(song);
 ;
@@ -389,14 +390,9 @@ L0011:	jsr     _ppu_wait_frame
 ;
 ; sfx_play(SFX_NOISE,0);
 ;
-L0032:	lda     #$00
+L003B:	lda     #$00
 	jsr     pusha
 	jsr     _sfx_play
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
-;
-; ppu_off();
-;
-	jsr     _ppu_off
 ;
 ; vram_adr(NTADR_A(10,10));
 ;
@@ -415,11 +411,7 @@ L0032:	lda     #$00
 ;
 ; vram_put(0);
 ;
-<<<<<<< HEAD
-L003A:	lda     #$00
-=======
-L0033:	lda     #$00
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+L003C:	lda     #$00
 	jsr     _vram_put
 ;
 ; ++i;
@@ -430,11 +422,7 @@ L0033:	lda     #$00
 ;
 L0018:	ldy     _i
 	lda     _Text,y
-<<<<<<< HEAD
-	bne     L003A
-=======
-	bne     L0033
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+	bne     L003C
 ;
 ; vram_adr(NTADR_A(14,18));
 ;
@@ -453,11 +441,7 @@ L0018:	ldy     _i
 ;
 ; vram_put(0);
 ;
-<<<<<<< HEAD
-L003B:	lda     #$00
-=======
-L0034:	lda     #$00
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+L003D:	lda     #$00
 	jsr     _vram_put
 ;
 ; ++i;
@@ -468,11 +452,7 @@ L0034:	lda     #$00
 ;
 L001C:	ldy     _i
 	lda     _Text3,y
-<<<<<<< HEAD
-	bne     L003B
-=======
-	bne     L0034
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+	bne     L003D
 ;
 ; vram_adr(NTADR_A(10,15));
 ;
@@ -590,41 +570,32 @@ L002A:	ldy     _i
 ;
 ; if(x==1){
 ;
-<<<<<<< HEAD
 	cmp     #$01
-	bne     L003C
-=======
-	jmp     L002F
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+	bne     L003E
 ;
 ; vram_put(rollone[i]);
 ;
-<<<<<<< HEAD
 	ldy     _i
 	lda     _rollone,y
-=======
-L0035:	lda     _x
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 	jsr     _vram_put
 ;
 ; if(x==2){
 ;
-L003C:	lda     _x
+L003E:	lda     _x
 	cmp     #$02
-	bne     L003D
+	bne     L003F
 ;
 ; vram_put(rolltwo[i]);
 ;
-<<<<<<< HEAD
 	ldy     _i
 	lda     _rolltwo,y
 	jsr     _vram_put
 ;
 ; if(x==3){
 ;
-L003D:	lda     _x
+L003F:	lda     _x
 	cmp     #$03
-	bne     L003E
+	bne     L0040
 ;
 ; vram_put(rollthree[i]);
 ;
@@ -634,9 +605,9 @@ L003D:	lda     _x
 ;
 ; if(x==4){
 ;
-L003E:	lda     _x
+L0040:	lda     _x
 	cmp     #$04
-	bne     L003F
+	bne     L0041
 ;
 ; vram_put(rollfour[i]);
 ;
@@ -646,9 +617,9 @@ L003E:	lda     _x
 ;
 ; if(x==5){
 ;
-L003F:	lda     _x
+L0041:	lda     _x
 	cmp     #$05
-	bne     L0040
+	bne     L0042
 ;
 ; vram_put(rollfive[i]);
 ;
@@ -658,32 +629,23 @@ L003F:	lda     _x
 ;
 ; if(x==6){
 ;
-L0040:	lda     _x
+L0042:	lda     _x
 	cmp     #$06
-	bne     L0037
+	bne     L0038
 ;
 ; vram_put(rollsix[i]);
 ;
 	ldy     _i
 	lda     _rollsix,y
 	jsr     _vram_put
-=======
-L002F:	ldy     _i
-	lda     _rollone,y
-	bne     L0035
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; ppu_on_bg();
 ;
-L0037:	jsr     _ppu_on_bg
+L0038:	jsr     _ppu_on_bg
 ;
 ; if(i&PAD_B)
 ;
-<<<<<<< HEAD
-L0041:	lda     _i
-=======
-L0036:	lda     _i
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+L0043:	lda     _i
 	and     #$40
 	jeq     L0011
 ;

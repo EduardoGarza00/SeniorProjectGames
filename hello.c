@@ -9,7 +9,9 @@
 
  
 
-unsigned char i,x;
+unsigned char i,x,k;
+
+unsigned char song;
 
 const unsigned char Text[]="Roll the Dice!";
 const unsigned char Text2[]="Start";
@@ -22,6 +24,8 @@ const unsigned char rollfour[]="4";
 const unsigned char rollfive[]="5";
 const unsigned char rollsix[]="6";
 const unsigned char brder[]="~~~~~~~~~~~~~~";
+
+enum {SFX_NOISE};
 
 const unsigned char palette[]={
 BLACK, DK_GY, LT_GY, WHITE,
@@ -36,6 +40,8 @@ void main (void) {
 	
 	pal_spr(palette);
 	pal_bg(palette); 
+	set_vram_buffer();
+	clear_vram_buffer();
 	
 	ppu_on_all();
 	
@@ -63,7 +69,7 @@ void main (void) {
 		++i;
 	}
 	
-	
+	k=0;
 	while (1){
 		// infinite loop
 		// game code can go here later.
@@ -101,6 +107,13 @@ void main (void) {
 		if(i&PAD_A)
 		{
 			ppu_off();
+			
+			if(k==0){
+			music_play(song);
+			k=1;
+			}
+			
+			sfx_play(SFX_NOISE,0);
 			
 			
 			//clear Roll the dice!
@@ -178,6 +191,8 @@ void main (void) {
 		
 		if(i&PAD_B)
 		{
+			k=0;
+			music_stop();
 			ppu_off();
 		}
 
