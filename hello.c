@@ -141,19 +141,35 @@ void main (void) {
 				++i;
 			}
 			
-			//Randomize number
-			x=rand8();
-			
 			//number rolled
 			vram_adr(NTADR_A(21,15));
-			i = 0;
+			i=0;
+
+			//Generates random number between 1-6
+			x=(rand8()%6)+1;
 			
-			//So far only prints a c? Not sure why
-			//was gonna implement if elses here
-			//If x = 1 do the rollone inside the vram_put and all the way till x=6,rollsix
-			while(rollone[i]){
-				vram_put(x);
-				++i;
+			if(x==1){
+				vram_put(rollone[i]);
+			} 
+			
+			if(x==2){
+				vram_put(rolltwo[i]);
+			}
+			
+			if(x==3){
+				vram_put(rollthree[i]);
+			}
+			
+			if(x==4){
+				vram_put(rollfour[i]);
+			}
+			
+			if(x==5){
+				vram_put(rollfive[i]);
+			}
+			
+			if(x==6){
+				vram_put(rollsix[i]);
 			}
 			
 			ppu_on_bg();

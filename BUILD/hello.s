@@ -344,7 +344,7 @@ L0011:	jsr     _ppu_wait_frame
 ; if(i&PAD_A)
 ;
 	and     #$80
-	jeq     L0034
+	jeq     L0041
 ;
 ; ppu_off();
 ;
@@ -367,7 +367,7 @@ L0011:	jsr     _ppu_wait_frame
 ;
 ; vram_put(0);
 ;
-L0031:	lda     #$00
+L003A:	lda     #$00
 	jsr     _vram_put
 ;
 ; ++i;
@@ -378,7 +378,7 @@ L0031:	lda     #$00
 ;
 L0017:	ldy     _i
 	lda     _Text,y
-	bne     L0031
+	bne     L003A
 ;
 ; vram_adr(NTADR_A(14,18));
 ;
@@ -397,7 +397,7 @@ L0017:	ldy     _i
 ;
 ; vram_put(0);
 ;
-L0032:	lda     #$00
+L003B:	lda     #$00
 	jsr     _vram_put
 ;
 ; ++i;
@@ -408,7 +408,7 @@ L0032:	lda     #$00
 ;
 L001B:	ldy     _i
 	lda     _Text3,y
-	bne     L0032
+	bne     L003B
 ;
 ; vram_adr(NTADR_A(10,15));
 ;
@@ -503,48 +503,105 @@ L0029:	ldy     _i
 	lda     _brder,y
 	bne     L0027
 ;
-; x=rand8();
-;
-	jsr     _rand8
-	sta     _x
-;
 ; vram_adr(NTADR_A(21,15));
 ;
 	ldx     #$21
 	lda     #$F5
 	jsr     _vram_adr
 ;
-; i = 0;
+; i=0;
 ;
 	lda     #$00
 	sta     _i
 ;
-; while(rollone[i]){
+; x=(rand8()%6)+1;
 ;
-	jmp     L002E
+	jsr     _rand8
+	jsr     pushax
+	lda     #$06
+	jsr     tosumoda0
+	clc
+	adc     #$01
+	sta     _x
 ;
-; vram_put(x);
+; if(x==1){
 ;
-L0033:	lda     _x
+	cmp     #$01
+	bne     L003C
+;
+; vram_put(rollone[i]);
+;
+	ldy     _i
+	lda     _rollone,y
 	jsr     _vram_put
 ;
-; ++i;
+; if(x==2){
 ;
-	inc     _i
+L003C:	lda     _x
+	cmp     #$02
+	bne     L003D
 ;
-; while(rollone[i]){
+; vram_put(rolltwo[i]);
 ;
-L002E:	ldy     _i
-	lda     _rollone,y
-	bne     L0033
+	ldy     _i
+	lda     _rolltwo,y
+	jsr     _vram_put
+;
+; if(x==3){
+;
+L003D:	lda     _x
+	cmp     #$03
+	bne     L003E
+;
+; vram_put(rollthree[i]);
+;
+	ldy     _i
+	lda     _rollthree,y
+	jsr     _vram_put
+;
+; if(x==4){
+;
+L003E:	lda     _x
+	cmp     #$04
+	bne     L003F
+;
+; vram_put(rollfour[i]);
+;
+	ldy     _i
+	lda     _rollfour,y
+	jsr     _vram_put
+;
+; if(x==5){
+;
+L003F:	lda     _x
+	cmp     #$05
+	bne     L0040
+;
+; vram_put(rollfive[i]);
+;
+	ldy     _i
+	lda     _rollfive,y
+	jsr     _vram_put
+;
+; if(x==6){
+;
+L0040:	lda     _x
+	cmp     #$06
+	bne     L0037
+;
+; vram_put(rollsix[i]);
+;
+	ldy     _i
+	lda     _rollsix,y
+	jsr     _vram_put
 ;
 ; ppu_on_bg();
 ;
-	jsr     _ppu_on_bg
+L0037:	jsr     _ppu_on_bg
 ;
 ; if(i&PAD_B)
 ;
-L0034:	lda     _i
+L0041:	lda     _i
 	and     #$40
 	jeq     L0011
 ;
