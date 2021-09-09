@@ -18,12 +18,19 @@
 	.import		_ppu_on_all
 	.import		_ppu_on_bg
 	.import		_oam_spr
+	.import		_music_play
+	.import		_music_stop
+	.import		_sfx_play
 	.import		_pad_trigger
 	.import		_rand8
 	.import		_vram_adr
 	.import		_vram_put
+	.import		_set_vram_buffer
+	.import		_clear_vram_buffer
 	.export		_i
 	.export		_x
+	.export		_k
+	.export		_song
 	.export		_Text
 	.export		_Text2
 	.export		_Text3
@@ -86,6 +93,10 @@ _i:
 	.res	1,$00
 _x:
 	.res	1,$00
+_k:
+	.res	1,$00
+_song:
+	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ main (void)
@@ -109,6 +120,14 @@ _x:
 	lda     #<(_palette)
 	ldx     #>(_palette)
 	jsr     _pal_bg
+;
+; set_vram_buffer();
+;
+	jsr     _set_vram_buffer
+;
+; clear_vram_buffer();
+;
+	jsr     _clear_vram_buffer
 ;
 ; ppu_on_all();
 ;
@@ -206,6 +225,10 @@ L000C:	ldy     _i
 L000E:	ldy     _i
 	lda     _Text3,y
 	bne     L000C
+;
+; k=0;
+;
+	sta     _k
 ;
 ; ppu_wait_frame();
 ;
@@ -344,7 +367,32 @@ L0011:	jsr     _ppu_wait_frame
 ; if(i&PAD_A)
 ;
 	and     #$80
+<<<<<<< HEAD
 	jeq     L0041
+=======
+	jeq     L0036
+;
+; if(k==0){
+;
+	lda     _k
+	bne     L0032
+;
+; music_play(song);
+;
+	lda     _song
+	jsr     _music_play
+;
+; k=1;
+;
+	lda     #$01
+	sta     _k
+;
+; sfx_play(SFX_NOISE,0);
+;
+L0032:	lda     #$00
+	jsr     pusha
+	jsr     _sfx_play
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; ppu_off();
 ;
@@ -363,11 +411,15 @@ L0011:	jsr     _ppu_wait_frame
 ;
 ; while(Text[i]){
 ;
-	jmp     L0017
+	jmp     L0018
 ;
 ; vram_put(0);
 ;
+<<<<<<< HEAD
 L003A:	lda     #$00
+=======
+L0033:	lda     #$00
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 	jsr     _vram_put
 ;
 ; ++i;
@@ -376,9 +428,13 @@ L003A:	lda     #$00
 ;
 ; while(Text[i]){
 ;
-L0017:	ldy     _i
+L0018:	ldy     _i
 	lda     _Text,y
+<<<<<<< HEAD
 	bne     L003A
+=======
+	bne     L0033
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; vram_adr(NTADR_A(14,18));
 ;
@@ -393,11 +449,15 @@ L0017:	ldy     _i
 ;
 ; while(Text3[i]){
 ;
-	jmp     L001B
+	jmp     L001C
 ;
 ; vram_put(0);
 ;
+<<<<<<< HEAD
 L003B:	lda     #$00
+=======
+L0034:	lda     #$00
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 	jsr     _vram_put
 ;
 ; ++i;
@@ -406,9 +466,13 @@ L003B:	lda     #$00
 ;
 ; while(Text3[i]){
 ;
-L001B:	ldy     _i
+L001C:	ldy     _i
 	lda     _Text3,y
+<<<<<<< HEAD
 	bne     L003B
+=======
+	bne     L0034
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; vram_adr(NTADR_A(10,15));
 ;
@@ -423,11 +487,11 @@ L001B:	ldy     _i
 ;
 ; while(Text4[i]){
 ;
-	jmp     L001F
+	jmp     L0020
 ;
 ; vram_put(Text4[i]);
 ;
-L001D:	ldy     _i
+L001E:	ldy     _i
 	lda     _Text4,y
 	jsr     _vram_put
 ;
@@ -437,9 +501,9 @@ L001D:	ldy     _i
 ;
 ; while(Text4[i]){
 ;
-L001F:	ldy     _i
+L0020:	ldy     _i
 	lda     _Text4,y
-	bne     L001D
+	bne     L001E
 ;
 ; vram_adr(NTADR_A(9,12));
 ;
@@ -454,11 +518,11 @@ L001F:	ldy     _i
 ;
 ; while(brder[i]){
 ;
-	jmp     L0024
+	jmp     L0025
 ;
 ; vram_put(brder[i]);
 ;
-L0022:	ldy     _i
+L0023:	ldy     _i
 	lda     _brder,y
 	jsr     _vram_put
 ;
@@ -468,9 +532,9 @@ L0022:	ldy     _i
 ;
 ; while(brder[i]){
 ;
-L0024:	ldy     _i
+L0025:	ldy     _i
 	lda     _brder,y
-	bne     L0022
+	bne     L0023
 ;
 ; vram_adr(NTADR_A(9,18));
 ;
@@ -485,11 +549,11 @@ L0024:	ldy     _i
 ;
 ; while(brder[i]){
 ;
-	jmp     L0029
+	jmp     L002A
 ;
 ; vram_put(brder[i]);
 ;
-L0027:	ldy     _i
+L0028:	ldy     _i
 	lda     _brder,y
 	jsr     _vram_put
 ;
@@ -499,9 +563,9 @@ L0027:	ldy     _i
 ;
 ; while(brder[i]){
 ;
-L0029:	ldy     _i
+L002A:	ldy     _i
 	lda     _brder,y
-	bne     L0027
+	bne     L0028
 ;
 ; vram_adr(NTADR_A(21,15));
 ;
@@ -526,13 +590,21 @@ L0029:	ldy     _i
 ;
 ; if(x==1){
 ;
+<<<<<<< HEAD
 	cmp     #$01
 	bne     L003C
+=======
+	jmp     L002F
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; vram_put(rollone[i]);
 ;
+<<<<<<< HEAD
 	ldy     _i
 	lda     _rollone,y
+=======
+L0035:	lda     _x
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 	jsr     _vram_put
 ;
 ; if(x==2){
@@ -543,6 +615,7 @@ L003C:	lda     _x
 ;
 ; vram_put(rolltwo[i]);
 ;
+<<<<<<< HEAD
 	ldy     _i
 	lda     _rolltwo,y
 	jsr     _vram_put
@@ -594,6 +667,11 @@ L0040:	lda     _x
 	ldy     _i
 	lda     _rollsix,y
 	jsr     _vram_put
+=======
+L002F:	ldy     _i
+	lda     _rollone,y
+	bne     L0035
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 ;
 ; ppu_on_bg();
 ;
@@ -601,9 +679,22 @@ L0037:	jsr     _ppu_on_bg
 ;
 ; if(i&PAD_B)
 ;
+<<<<<<< HEAD
 L0041:	lda     _i
+=======
+L0036:	lda     _i
+>>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 	and     #$40
 	jeq     L0011
+;
+; k=0;
+;
+	lda     #$00
+	sta     _k
+;
+; music_stop();
+;
+	jsr     _music_stop
 ;
 ; ppu_off();
 ;
