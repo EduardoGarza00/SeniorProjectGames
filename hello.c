@@ -9,8 +9,9 @@
 
  
 
-unsigned char i,x;
+unsigned char i,x,k;
 
+unsigned char song;
 const unsigned char Text[]="Roll the Dice!";
 const unsigned char Text2[]="Start";
 const unsigned char Text3[]="Exit";
@@ -22,7 +23,7 @@ const unsigned char rollfour[]="4";
 const unsigned char rollfive[]="5";
 const unsigned char rollsix[]="6";
 const unsigned char brder[]="~~~~~~~~~~~~~~";
-
+enum {SFX_NOISE};
 const unsigned char palette[]={
 BLACK, DK_GY, LT_GY, WHITE,
 0,0,0,0,
@@ -33,18 +34,30 @@ BLACK, DK_GY, LT_GY, WHITE,
 
 void main (void) {
 	
+
+
 	
 	pal_spr(palette);
 	pal_bg(palette); 
+	set_vram_buffer();
+	clear_vram_buffer();
+	
+	
+	
+	
 	
 	ppu_on_all();
 	
 	vram_adr(NTADR_A(10,10)); // screen is 32 x 30 tiles
 
+
 	i = 0;
 	while(Text[i]){
 		vram_put(Text[i]);
 		++i;
+
+
+
 	}
 	
 	vram_adr(NTADR_A(14,15));
@@ -62,12 +75,13 @@ void main (void) {
 		vram_put(Text3[i]);
 		++i;
 	}
-	
-	
+k=0;
+	//music_play(song);
 	while (1){
 		// infinite loop
 		// game code can go here later.
 		
+
 		ppu_wait_frame();
 		
 		//Num 1
@@ -98,10 +112,17 @@ void main (void) {
 		
 		i=pad_trigger(0);
 		
+		
 		if(i&PAD_A)
 		{
-			ppu_off();
 			
+			if(k==0){
+			music_play(song);
+			k=1;
+			}
+			
+			sfx_play(SFX_NOISE,0);
+			ppu_off();
 			
 			//clear Roll the dice!
 			vram_adr(NTADR_A(10,10));
@@ -162,6 +183,8 @@ void main (void) {
 		
 		if(i&PAD_B)
 		{
+			k=0;
+			music_stop();
 			ppu_off();
 		}
 
