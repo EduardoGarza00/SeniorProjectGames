@@ -2,29 +2,13 @@ al 000001 .NES_CHR_BANKS
 al 000000 .NES_MAPPER
 al 000001 .NES_MIRRORING
 al 000002 .NES_PRG_BANKS
-<<<<<<< HEAD
-al 00941C ._Text
-al 00942B ._Text2
-al 009431 ._Text3
-al 009436 ._Text4
-=======
-al 00946F ._Text
-al 00947E ._Text2
-al 009484 ._Text3
-al 009489 ._Text4
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 al 000300 .__BSS_LOAD__
 al 000300 .__BSS_RUN__
-al 000004 .__BSS_SIZE__
+al 000003 .__BSS_SIZE__
 al 0086DD .__CODE_LOAD__
 al 0086DD .__CODE_RUN__
-<<<<<<< HEAD
-al 000D3F .__CODE_SIZE__
-al 00946D .__DATA_LOAD__
-=======
-al 000CA2 .__CODE_SIZE__
-al 0094C0 .__DATA_LOAD__
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 000B14 .__CODE_SIZE__
+al 00A785 .__DATA_LOAD__
 al 000300 .__DATA_RUN__
 al 000000 .__DATA_SIZE__
 al 000010 .__PRG_FILEOFFS__
@@ -32,18 +16,12 @@ al 010000 .__PRG_LAST__
 al 008000 .__PRG_SIZE__
 al 008000 .__PRG_START__
 al 000000 .__RAM_FILEOFFS__
-al 000304 .__RAM_LAST__
+al 000303 .__RAM_LAST__
 al 000400 .__RAM_SIZE__
 al 000300 .__RAM_START__
-<<<<<<< HEAD
-al 00941C .__RODATA_LOAD__
-al 00941C .__RODATA_RUN__
-al 000051 .__RODATA_SIZE__
-=======
-al 00937F .__RODATA_LOAD__
-al 00937F .__RODATA_RUN__
-al 000141 .__RODATA_SIZE__
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 0091F1 .__RODATA_LOAD__
+al 0091F1 .__RODATA_RUN__
+al 001594 .__RODATA_SIZE__
 al 000100 .__STACKSIZE__
 al 000700 .__STACK_START__
 al 008000 .__STARTUP_LOAD__
@@ -57,11 +35,6 @@ al 000000 .__ZP_START__
 al 00881A ._add_scroll_y
 al 008413 ._bank_bg
 al 008403 ._bank_spr
-<<<<<<< HEAD
-al 00944E ._brder
-=======
-al 0094A1 ._brder
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 al 0089C5 ._buffer_1_mt
 al 0088A2 ._buffer_4_mt
 al 008767 ._check_collision
@@ -69,6 +42,7 @@ al 00874D ._clear_vram_buffer
 al 008A1C ._color_emphasis
 al 008603 ._delay
 al 008000 ._exit
+al 0090A6 ._fade_in
 al 00850B ._flush_vram_update
 al 00850F ._flush_vram_update_nmi
 al 008877 ._get_at_addr
@@ -76,9 +50,9 @@ al 00875E ._get_frame_count
 al 008757 ._get_pad_new
 al 008850 ._get_ppu_addr
 al 008A75 ._gray_line
-al 000300 ._i
-al 000302 ._k
-al 009097 ._main
+al 000302 ._i
+al 000301 ._k
+al 009101 ._main
 al 0085A1 ._memcpy
 al 0085D4 ._memfill
 al 0086E9 ._multi_vram_buffer_horz
@@ -106,11 +80,7 @@ al 00823B ._pal_col
 al 0087C7 ._pal_fade_to
 al 008232 ._pal_spr
 al 00825A ._pal_spr_bright
-<<<<<<< HEAD
-al 00945D ._palette
-=======
-al 0094B0 ._palette
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 00A775 ._palette
 al 00829B ._ppu_mask
 al 00827D ._ppu_off
 al 008286 ._ppu_on_all
@@ -121,21 +91,6 @@ al 008350 ._ppu_wait_frame
 al 008365 ._ppu_wait_nmi
 al 0084F5 ._rand16
 al 0084EA ._rand8
-<<<<<<< HEAD
-al 00944A ._rollfive
-al 009448 ._rollfour
-al 009442 ._rollone
-al 00944C ._rollsix
-al 009446 ._rollthree
-al 009444 ._rolltwo
-=======
-al 00949D ._rollfive
-al 00949B ._rollfour
-al 009495 ._rollone
-al 00949F ._rollsix
-al 009499 ._rollthree
-al 009497 ._rolltwo
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
 al 008486 ._sample_play
 al 0083A7 ._scroll
 al 008A97 ._seed_rng
@@ -148,9 +103,11 @@ al 008809 ._set_scroll_y
 al 0086DD ._set_vram_buffer
 al 008502 ._set_vram_update
 al 008475 ._sfx_play
-al 000303 ._song
+al 0090D0 ._show_title_screen
+al 000300 ._song
 al 0083DA ._split
 al 008832 ._sub_scroll_y
+al 00A4F5 ._titlescreen
 al 008560 ._vram_adr
 al 00856B ._vram_fill
 al 00858D ._vram_inc
@@ -158,35 +115,23 @@ al 008567 ._vram_put
 al 008424 ._vram_read
 al 008370 ._vram_unrle
 al 00844E ._vram_write
-al 000301 ._x
 al 008A29 ._xy_split
-<<<<<<< HEAD
-al 009315 .copydata
-al 009342 .decsp3
-al 009357 .incsp2
-al 009365 .popa
-al 00934F .popax
-al 009371 .popptr1
-=======
-al 0092EA .copydata
-al 009317 .decsp3
-al 00932C .incsp2
-al 00933A .popa
-al 009324 .popax
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 009143 .addysp
+al 009142 .addysp1
+al 009150 .copydata
+al 00917D .decsp1
+al 009186 .incsp1
+al 009195 .incsp2
+al 0091A3 .incsp4
+al 0091A8 .popa
+al 00918D .popax
 al 000037 .ptr1
 al 000039 .ptr2
 al 00003B .ptr3
 al 00003D .ptr4
-<<<<<<< HEAD
-al 00937F .push0
-al 009381 .pusha0
-al 009383 .pushax
-=======
-al 00934A .pusha
-al 009346 .pusha0sp
-al 009348 .pushaysp
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 0091B4 .push0
+al 0091B6 .pusha0
+al 0091B8 .pushax
 al 000043 .regbank
 al 000033 .regsave
 al 00002F .sp
@@ -195,13 +140,4 @@ al 00003F .tmp1
 al 000040 .tmp2
 al 000041 .tmp3
 al 000042 .tmp4
-<<<<<<< HEAD
-al 009399 .tosudiva0
-al 00939B .tosudivax
-al 0093E8 .tosumoda0
-al 0093EA .tosumodax
-al 0093AA .udiv16
-al 0093F9 .zerobss
-=======
-al 00935C .zerobss
->>>>>>> c44c57417601c8e62dd30e5c628f14fb4c798e4f
+al 0091CE .zerobss
