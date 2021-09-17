@@ -23,6 +23,8 @@
 	.import		_vram_unrle
 	.export		_titlescreen
 	.export		_palette
+	.export		_gamescreen
+	.export		_palette2
 	.export		_song
 	.export		_k
 	.export		_i
@@ -690,6 +692,523 @@ _palette:
 	.byte	$09
 	.byte	$19
 	.byte	$29
+_gamescreen:
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$1E
+	.byte	$17
+	.byte	$00
+	.byte	$12
+	.byte	$02
+	.byte	$09
+	.byte	$00
+	.byte	$02
+	.byte	$0A
+	.byte	$13
+	.byte	$02
+	.byte	$08
+	.byte	$17
+	.byte	$00
+	.byte	$00
+	.byte	$4C
+	.byte	$69
+	.byte	$76
+	.byte	$65
+	.byte	$73
+	.byte	$3A
+	.byte	$33
+	.byte	$00
+	.byte	$02
+	.byte	$0C
+	.byte	$53
+	.byte	$63
+	.byte	$6F
+	.byte	$72
+	.byte	$65
+	.byte	$3A
+	.byte	$30
+	.byte	$30
+	.byte	$00
+	.byte	$17
+	.byte	$1E
+	.byte	$1F
+	.byte	$20
+	.byte	$1B
+	.byte	$1E
+	.byte	$20
+	.byte	$1F
+	.byte	$1E
+	.byte	$1D
+	.byte	$20
+	.byte	$1F
+	.byte	$1B
+	.byte	$1F
+	.byte	$20
+	.byte	$1B
+	.byte	$1E
+	.byte	$20
+	.byte	$1B
+	.byte	$1F
+	.byte	$20
+	.byte	$1B
+	.byte	$1F
+	.byte	$1B
+	.byte	$20
+	.byte	$1B
+	.byte	$1D
+	.byte	$1B
+	.byte	$20
+	.byte	$1B
+	.byte	$1F
+	.byte	$1E
+	.byte	$1F
+	.byte	$1F
+	.byte	$00
+	.byte	$02
+	.byte	$1D
+	.byte	$1B
+	.byte	$1D
+	.byte	$00
+	.byte	$00
+	.byte	$B3
+	.byte	$B3
+	.byte	$C8
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$A2
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$1D
+	.byte	$1D
+	.byte	$00
+	.byte	$00
+	.byte	$1C
+	.byte	$1C
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$C4
+	.byte	$1C
+	.byte	$1C
+	.byte	$A2
+	.byte	$00
+	.byte	$20
+	.byte	$1F
+	.byte	$00
+	.byte	$00
+	.byte	$1C
+	.byte	$1C
+	.byte	$00
+	.byte	$02
+	.byte	$11
+	.byte	$9D
+	.byte	$00
+	.byte	$B6
+	.byte	$C4
+	.byte	$1C
+	.byte	$1C
+	.byte	$A2
+	.byte	$00
+	.byte	$1D
+	.byte	$1F
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1F
+	.byte	$1D
+	.byte	$00
+	.byte	$00
+	.byte	$1A
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1E
+	.byte	$20
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1A
+	.byte	$B6
+	.byte	$1A
+	.byte	$00
+	.byte	$02
+	.byte	$12
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1B
+	.byte	$1B
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1A
+	.byte	$B6
+	.byte	$1A
+	.byte	$00
+	.byte	$02
+	.byte	$0E
+	.byte	$B6
+	.byte	$00
+	.byte	$B6
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$20
+	.byte	$20
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$0F
+	.byte	$B6
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$1E
+	.byte	$1F
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$9B
+	.byte	$89
+	.byte	$88
+	.byte	$89
+	.byte	$94
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$1B
+	.byte	$20
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$0F
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$1D
+	.byte	$1B
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$0F
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$20
+	.byte	$1D
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$10
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$1F
+	.byte	$1E
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$10
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$1D
+	.byte	$20
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$12
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$20
+	.byte	$1D
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$12
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$1B
+	.byte	$1F
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$13
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$1F
+	.byte	$20
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$1B
+	.byte	$1B
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$14
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$1F
+	.byte	$1E
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$13
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$20
+	.byte	$1D
+	.byte	$00
+	.byte	$B9
+	.byte	$1C
+	.byte	$1C
+	.byte	$B6
+	.byte	$02
+	.byte	$05
+	.byte	$00
+	.byte	$02
+	.byte	$0F
+	.byte	$1C
+	.byte	$1C
+	.byte	$B6
+	.byte	$00
+	.byte	$1B
+	.byte	$1E
+	.byte	$00
+	.byte	$B9
+	.byte	$1C
+	.byte	$1C
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$B6
+	.byte	$02
+	.byte	$05
+	.byte	$00
+	.byte	$02
+	.byte	$0A
+	.byte	$1C
+	.byte	$1C
+	.byte	$00
+	.byte	$00
+	.byte	$1D
+	.byte	$1D
+	.byte	$00
+	.byte	$02
+	.byte	$0D
+	.byte	$B6
+	.byte	$02
+	.byte	$0A
+	.byte	$E5
+	.byte	$02
+	.byte	$03
+	.byte	$00
+	.byte	$20
+	.byte	$20
+	.byte	$00
+	.byte	$02
+	.byte	$1D
+	.byte	$20
+	.byte	$1B
+	.byte	$1D
+	.byte	$1F
+	.byte	$1B
+	.byte	$1E
+	.byte	$20
+	.byte	$1F
+	.byte	$1D
+	.byte	$1E
+	.byte	$1E
+	.byte	$1B
+	.byte	$20
+	.byte	$20
+	.byte	$1D
+	.byte	$1E
+	.byte	$1B
+	.byte	$20
+	.byte	$1D
+	.byte	$1E
+	.byte	$1B
+	.byte	$20
+	.byte	$1B
+	.byte	$1F
+	.byte	$20
+	.byte	$1D
+	.byte	$1E
+	.byte	$20
+	.byte	$1E
+	.byte	$1E
+	.byte	$20
+	.byte	$1F
+	.byte	$1E
+	.byte	$C7
+	.byte	$02
+	.byte	$1F
+	.byte	$00
+	.byte	$02
+	.byte	$07
+	.byte	$44
+	.byte	$11
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$54
+	.byte	$11
+	.byte	$04
+	.byte	$51
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$40
+	.byte	$54
+	.byte	$00
+	.byte	$00
+	.byte	$11
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$44
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$11
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$11
+	.byte	$00
+	.byte	$44
+	.byte	$11
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$45
+	.byte	$00
+	.byte	$04
+	.byte	$05
+	.byte	$05
+	.byte	$45
+	.byte	$50
+	.byte	$50
+	.byte	$54
+	.byte	$11
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$00
+	.byte	$02
+	.byte	$00
+_palette2:
+	.byte	$21
+	.byte	$15
+	.byte	$05
+	.byte	$1B
+	.byte	$2C
+	.byte	$27
+	.byte	$21
+	.byte	$0F
+	.byte	$2C
+	.byte	$06
+	.byte	$16
+	.byte	$26
+	.byte	$2C
+	.byte	$09
+	.byte	$19
+	.byte	$29
 
 .segment	"BSS"
 
@@ -828,11 +1347,6 @@ L0003:	jmp     incsp1
 .segment	"CODE"
 
 ;
-; k=0;
-;
-	lda     #$00
-	sta     _k
-;
 ; show_title_screen(palette, titlescreen);
 ;
 	lda     #<(_palette)
@@ -842,42 +1356,36 @@ L0003:	jmp     incsp1
 	ldx     #>(_titlescreen)
 	jsr     _show_title_screen
 ;
-; i=pad_trigger(0);
-;
-L0002:	lda     #$00
-L0009:	jsr     _pad_trigger
-	sta     _i
-;
-; if(i&PAD_A)
-;
-	and     #$80
-	beq     L000A
-;
-; if(k==0){
-;
-	lda     _k
-	bne     L000A
-;
 ; music_play(song);
 ;
 	lda     _song
 	jsr     _music_play
 ;
-; k=1;
+; i=pad_trigger(0);
 ;
-	lda     #$01
-	sta     _k
+L0002:	lda     #$00
+L0008:	jsr     _pad_trigger
+	sta     _i
+;
+; if(i&PAD_A)
+;
+	and     #$80
+	beq     L0009
+;
+; show_title_screen(palette2, gamescreen);
+;
+	lda     #<(_palette2)
+	ldx     #>(_palette2)
+	jsr     pushax
+	lda     #<(_gamescreen)
+	ldx     #>(_gamescreen)
+	jsr     _show_title_screen
 ;
 ; if(i&PAD_B)
 ;
-L000A:	lda     _i
+L0009:	lda     _i
 	and     #$40
-	beq     L0009
-;
-; k=0;
-;
-	lda     #$00
-	sta     _k
+	beq     L0008
 ;
 ; music_stop();
 ;

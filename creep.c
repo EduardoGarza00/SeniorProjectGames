@@ -1,9 +1,13 @@
 #include "LIB/neslib.h"
 #include "GFX/titlescreen.h"
 #include "GFX/titlescreenPal.h"
+#include "GFX/gamescreen.h"
+#include "GFX/gamescreenPal.h"
 
 extern const byte titlescreen[640];
 extern const byte palette[16];
+extern const byte gamescreen[499];
+extern const byte palette2[16];
 
 unsigned char song, k, i;
 
@@ -36,25 +40,23 @@ void show_title_screen(const byte* pal, const byte* rle) {
 
 void main(void)
 {
-	k=0;
-	
+
 	show_title_screen(palette, titlescreen);
+	music_play(song);
 	
 	while(1) {
 		i=pad_trigger(0);
 		
 		if(i&PAD_A)
 		{
-			if(k==0){
-				music_play(song);
-				k=1;
-			}
+			show_title_screen(palette2, gamescreen);
 		}
 		
 		if(i&PAD_B)
 		{
-			k=0;
 			music_stop();
 		}
+		
+		
 	}
 }
