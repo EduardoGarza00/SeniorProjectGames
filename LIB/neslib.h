@@ -248,6 +248,8 @@ void __fastcall__ vram_unlz4(const unsigned char *in, unsigned char *out,
 	- lz4 takes 2.8 frames
 */
 
+//like a normal memcpy, but does not return anything
+void __fastcall__ memcpy(void *dst,void *src,unsigned int len);
 
 // like memset, but does not return anything
 void __fastcall__ memfill(void *dst, unsigned char value, unsigned int len);

@@ -12,28 +12,371 @@
 	.macpack	longbranch
 	.forceimport	__STARTUP__
 	.import		_pal_all
+	.import		_pal_spr
 	.import		_pal_bright
+	.import		_ppu_wait_nmi
 	.import		_ppu_wait_frame
 	.import		_ppu_off
 	.import		_ppu_on_all
+	.import		_oam_clear
+	.import		_oam_spr
 	.import		_music_play
 	.import		_music_stop
+	.import		_pad_poll
 	.import		_pad_trigger
+	.import		_bank_spr
+	.import		_rand8
 	.import		_vram_adr
 	.import		_vram_unrle
+	.import		_check_collision
+	.export		_LeftHead
+	.export		_Uphead
+	.export		_DownHead
+	.export		_RightHead
+	.export		_pad1
+	.export		_pad2
+	.export		_i
+	.export		_j
+	.export		_l
+	.export		_k
+	.export		_collision
+	.export		_address
+	.export		_x
+	.export		_y
+	.export		_index
+	.export		_map
+	.export		_c_map
+	.export		_Snake1
+	.export		_mouse1
+	.export		_movement
+	.export		_test_eating
+	.export		_draw_mouse
+	.export		_mouse_coord
+	.export		_draw_sprites
+	.export		_respawn_mouse
+	.export		_test1
+	.export		_Room1
+	.export		_metatiles1
 	.export		_titlescreen
 	.export		_palette
 	.export		_gamescreen
 	.export		_palette2
+	.export		_palette5
 	.export		_song
-	.export		_k
-	.export		_i
+	.export		_pad
+	.export		_game_lives
 	.export		_fade_in
 	.export		_show_title_screen
+	.export		_game_loop
 	.export		_main
+
+.segment	"DATA"
+
+_Snake1:
+	.byte	$14
+	.byte	$14
+	.res	6,$00
+_mouse1:
+	.byte	$50
+	.byte	$14
+	.byte	$00
+	.byte	$07
+	.byte	$00
+	.res	6,$00
 
 .segment	"RODATA"
 
+_LeftHead:
+	.byte	$C0
+	.byte	$C0
+	.byte	$00
+	.byte	$03
+	.byte	$80
+_Uphead:
+	.byte	$C0
+	.byte	$C1
+	.byte	$01
+	.byte	$03
+	.byte	$80
+_DownHead:
+	.byte	$C1
+	.byte	$C1
+	.byte	$02
+	.byte	$03
+	.byte	$80
+_RightHead:
+	.byte	$C1
+	.byte	$3F
+	.byte	$03
+	.byte	$03
+	.byte	$80
+_Room1:
+	.byte	$01
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$04
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$04
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$04
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$03
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$04
+_metatiles1:
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$03
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$01
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$02
+	.byte	$05
+	.byte	$06
+	.byte	$08
+	.byte	$07
+	.byte	$01
+	.byte	$05
+	.byte	$06
+	.byte	$08
+	.byte	$07
+	.byte	$00
 _titlescreen:
 	.byte	$01
 	.byte	$9D
@@ -707,7 +1050,10 @@ _gamescreen:
 	.byte	$0A
 	.byte	$13
 	.byte	$02
-	.byte	$08
+	.byte	$05
+	.byte	$12
+	.byte	$12
+	.byte	$13
 	.byte	$17
 	.byte	$00
 	.byte	$00
@@ -727,8 +1073,8 @@ _gamescreen:
 	.byte	$72
 	.byte	$65
 	.byte	$3A
-	.byte	$30
-	.byte	$30
+	.byte	$12
+	.byte	$12
 	.byte	$00
 	.byte	$17
 	.byte	$1E
@@ -765,18 +1111,24 @@ _gamescreen:
 	.byte	$1F
 	.byte	$1F
 	.byte	$00
+	.byte	$B5
+	.byte	$00
+	.byte	$A5
 	.byte	$02
-	.byte	$1D
+	.byte	$03
+	.byte	$00
+	.byte	$02
+	.byte	$16
 	.byte	$1B
 	.byte	$1D
 	.byte	$00
-	.byte	$00
-	.byte	$B3
-	.byte	$B3
-	.byte	$C8
+	.byte	$B5
+	.byte	$A5
+	.byte	$02
+	.byte	$07
 	.byte	$00
 	.byte	$02
-	.byte	$14
+	.byte	$0F
 	.byte	$A2
 	.byte	$02
 	.byte	$02
@@ -784,56 +1136,63 @@ _gamescreen:
 	.byte	$1D
 	.byte	$1D
 	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$06
 	.byte	$00
-	.byte	$1C
-	.byte	$1C
+	.byte	$A5
+	.byte	$02
+	.byte	$04
 	.byte	$00
 	.byte	$02
-	.byte	$14
-	.byte	$C4
-	.byte	$1C
-	.byte	$1C
+	.byte	$0A
+	.byte	$16
+	.byte	$02
+	.byte	$02
 	.byte	$A2
 	.byte	$00
 	.byte	$20
 	.byte	$1F
-	.byte	$00
-	.byte	$00
-	.byte	$1C
-	.byte	$1C
+	.byte	$A5
+	.byte	$02
+	.byte	$0D
 	.byte	$00
 	.byte	$02
-	.byte	$11
-	.byte	$9D
-	.byte	$00
-	.byte	$B6
-	.byte	$C4
-	.byte	$1C
-	.byte	$1C
+	.byte	$07
+	.byte	$16
+	.byte	$A5
+	.byte	$02
+	.byte	$04
 	.byte	$A2
 	.byte	$00
 	.byte	$1D
 	.byte	$1F
 	.byte	$00
+	.byte	$A5
 	.byte	$02
+	.byte	$09
+	.byte	$C7
+	.byte	$A5
 	.byte	$02
-	.byte	$B6
-	.byte	$B6
+	.byte	$05
 	.byte	$00
-	.byte	$02
-	.byte	$14
-	.byte	$B6
 	.byte	$00
+	.byte	$16
+	.byte	$16
+	.byte	$A5
 	.byte	$02
-	.byte	$02
+	.byte	$04
+	.byte	$16
+	.byte	$00
+	.byte	$00
 	.byte	$1F
 	.byte	$1D
 	.byte	$00
-	.byte	$00
-	.byte	$1A
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$B5
+	.byte	$B5
+	.byte	$A5
 	.byte	$02
 	.byte	$14
 	.byte	$B6
@@ -843,14 +1202,14 @@ _gamescreen:
 	.byte	$1E
 	.byte	$20
 	.byte	$00
+	.byte	$B5
+	.byte	$A5
 	.byte	$02
-	.byte	$02
-	.byte	$1A
-	.byte	$B6
-	.byte	$1A
+	.byte	$0A
 	.byte	$00
+	.byte	$A5
 	.byte	$02
-	.byte	$12
+	.byte	$0A
 	.byte	$B6
 	.byte	$B6
 	.byte	$00
@@ -859,239 +1218,334 @@ _gamescreen:
 	.byte	$1B
 	.byte	$1B
 	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$1A
-	.byte	$B6
-	.byte	$1A
 	.byte	$00
+	.byte	$B5
+	.byte	$A5
+	.byte	$02
+	.byte	$08
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$09
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$20
+	.byte	$20
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$A5
 	.byte	$02
 	.byte	$0E
 	.byte	$B6
 	.byte	$00
-	.byte	$B6
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$20
-	.byte	$20
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$0F
-	.byte	$B6
-	.byte	$02
-	.byte	$02
-	.byte	$00
 	.byte	$02
 	.byte	$05
 	.byte	$1E
 	.byte	$1F
 	.byte	$00
 	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$00
 	.byte	$02
-	.byte	$04
-	.byte	$9B
-	.byte	$89
-	.byte	$88
-	.byte	$89
-	.byte	$94
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$11
 	.byte	$00
 	.byte	$02
 	.byte	$05
-	.byte	$B6
-	.byte	$B6
+	.byte	$1B
+	.byte	$20
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
 	.byte	$00
 	.byte	$02
 	.byte	$06
-	.byte	$1B
-	.byte	$20
+	.byte	$A5
+	.byte	$02
+	.byte	$08
+	.byte	$B6
+	.byte	$A5
+	.byte	$02
+	.byte	$03
 	.byte	$00
 	.byte	$02
 	.byte	$03
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$0F
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$06
 	.byte	$1D
 	.byte	$1B
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$0F
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$06
-	.byte	$20
-	.byte	$1D
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$10
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$06
-	.byte	$1F
-	.byte	$1E
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$10
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$1D
-	.byte	$20
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$12
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$20
-	.byte	$1D
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$12
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$04
-	.byte	$1B
-	.byte	$1F
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$13
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$04
-	.byte	$1F
-	.byte	$20
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$14
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$1B
-	.byte	$1B
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$14
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$1F
-	.byte	$1E
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$13
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$20
-	.byte	$1D
-	.byte	$00
-	.byte	$B9
-	.byte	$1C
-	.byte	$1C
-	.byte	$B6
+	.byte	$A5
 	.byte	$02
 	.byte	$05
 	.byte	$00
 	.byte	$02
-	.byte	$0F
-	.byte	$1C
-	.byte	$1C
-	.byte	$B6
-	.byte	$00
-	.byte	$1B
-	.byte	$1E
-	.byte	$00
-	.byte	$B9
-	.byte	$1C
-	.byte	$1C
+	.byte	$07
+	.byte	$A5
+	.byte	$02
+	.byte	$02
 	.byte	$00
 	.byte	$02
-	.byte	$04
+	.byte	$03
 	.byte	$B6
+	.byte	$A5
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$20
+	.byte	$1D
+	.byte	$A5
 	.byte	$02
 	.byte	$05
-	.byte	$00
-	.byte	$02
-	.byte	$0A
-	.byte	$1C
-	.byte	$1C
-	.byte	$00
-	.byte	$00
-	.byte	$1D
-	.byte	$1D
 	.byte	$00
 	.byte	$02
 	.byte	$0D
+	.byte	$A5
+	.byte	$00
+	.byte	$B6
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$1F
+	.byte	$1E
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$16
+	.byte	$00
+	.byte	$02
+	.byte	$0E
+	.byte	$A5
+	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$03
+	.byte	$00
+	.byte	$1D
+	.byte	$20
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$16
+	.byte	$00
+	.byte	$02
+	.byte	$0D
+	.byte	$A5
+	.byte	$A5
+	.byte	$F5
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$20
+	.byte	$1D
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$16
+	.byte	$00
+	.byte	$02
+	.byte	$06
+	.byte	$A5
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$B6
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$1B
+	.byte	$1F
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$05
+	.byte	$A5
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$09
+	.byte	$00
+	.byte	$1F
+	.byte	$20
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$05
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$F5
+	.byte	$B6
+	.byte	$B6
+	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$1B
+	.byte	$1B
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$16
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$02
+	.byte	$03
+	.byte	$F5
+	.byte	$00
+	.byte	$B6
+	.byte	$00
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$1F
+	.byte	$1E
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$A5
+	.byte	$02
+	.byte	$06
+	.byte	$00
+	.byte	$02
+	.byte	$03
+	.byte	$A5
+	.byte	$02
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$B6
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$20
+	.byte	$1D
+	.byte	$00
+	.byte	$B9
+	.byte	$A5
+	.byte	$02
+	.byte	$02
 	.byte	$B6
 	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$A5
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$02
+	.byte	$04
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$02
+	.byte	$02
+	.byte	$00
+	.byte	$1B
+	.byte	$1E
+	.byte	$00
+	.byte	$B9
+	.byte	$16
+	.byte	$02
 	.byte	$0A
+	.byte	$A5
+	.byte	$02
+	.byte	$0F
+	.byte	$00
+	.byte	$1D
+	.byte	$1D
+	.byte	$00
+	.byte	$00
+	.byte	$16
+	.byte	$00
+	.byte	$02
+	.byte	$08
+	.byte	$A5
+	.byte	$A5
+	.byte	$B6
+	.byte	$02
+	.byte	$02
+	.byte	$A5
+	.byte	$02
+	.byte	$03
+	.byte	$B6
+	.byte	$02
+	.byte	$03
 	.byte	$E5
 	.byte	$02
 	.byte	$03
@@ -1139,53 +1593,24 @@ _gamescreen:
 	.byte	$1F
 	.byte	$00
 	.byte	$02
-	.byte	$07
-	.byte	$44
-	.byte	$11
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$54
-	.byte	$11
+	.byte	$0D
 	.byte	$04
-	.byte	$51
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$40
-	.byte	$54
-	.byte	$00
-	.byte	$00
-	.byte	$11
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$44
 	.byte	$01
 	.byte	$00
-	.byte	$00
-	.byte	$11
+	.byte	$02
+	.byte	$05
+	.byte	$40
 	.byte	$00
 	.byte	$02
-	.byte	$02
-	.byte	$04
-	.byte	$11
-	.byte	$00
+	.byte	$10
 	.byte	$44
-	.byte	$11
 	.byte	$00
 	.byte	$02
-	.byte	$03
-	.byte	$45
-	.byte	$00
-	.byte	$04
-	.byte	$05
-	.byte	$05
-	.byte	$45
+	.byte	$0A
+	.byte	$10
+	.byte	$40
 	.byte	$50
-	.byte	$50
-	.byte	$54
-	.byte	$11
+	.byte	$10
 	.byte	$00
 	.byte	$02
 	.byte	$06
@@ -1209,15 +1634,449 @@ _palette2:
 	.byte	$09
 	.byte	$19
 	.byte	$29
+_palette5:
+	.byte	$0F
+	.byte	$09
+	.byte	$06
+	.byte	$29
+	.byte	$0F
+	.byte	$06
+	.byte	$16
+	.byte	$26
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 
 .segment	"BSS"
 
-_song:
+_pad1:
 	.res	1,$00
-_k:
+_pad2:
 	.res	1,$00
 _i:
 	.res	1,$00
+_j:
+	.res	1,$00
+_l:
+	.res	1,$00
+_k:
+	.res	1,$00
+_collision:
+	.res	1,$00
+_spr:
+	.res	1,$00
+_address:
+	.res	2,$00
+_x:
+	.res	1,$00
+_y:
+	.res	1,$00
+_index:
+	.res	1,$00
+_map:
+	.res	1,$00
+_c_map:
+	.res	522,$00
+_song:
+	.res	1,$00
+_pad:
+	.res	1,$00
+_game_lives:
+	.res	1,$00
+
+; ---------------------------------------------------------------
+; void __near__ movement (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_movement: near
+
+.segment	"CODE"
+
+;
+; if(pad1 & PAD_LEFT) {
+;
+	lda     _pad1
+	and     #$02
+	beq     L000A
+;
+; Snake1.x -= 1;
+;
+	dec     _Snake1
+;
+; Snake1.head_sprite = SNAKE_HEAD_TILE_LEFT;
+;
+	lda     #$00
+;
+; else if (pad1 & PAD_RIGHT){
+;
+	jmp     L0008
+L000A:	lda     _pad1
+	and     #$01
+	beq     L000B
+;
+; Snake1.x += 1;
+;
+	inc     _Snake1
+;
+; Snake1.head_sprite = SNAKE_HEAD_TILE_RIGHT;
+;
+	lda     #$03
+L0008:	sta     _Snake1+5
+;
+; if(pad1 & PAD_UP){
+;
+L000B:	lda     _pad1
+	and     #$08
+	beq     L000C
+;
+; Snake1.y -= 1;
+;
+	dec     _Snake1+1
+;
+; Snake1.head_sprite=SNAKE_HEAD_TILE_UP;
+;
+	lda     #$01
+;
+; else if (pad1 & PAD_DOWN){
+;
+	jmp     L0009
+L000C:	lda     _pad1
+	and     #$04
+	beq     L0007
+;
+; Snake1.y += 1;
+;
+	inc     _Snake1+1
+;
+; Snake1.head_sprite=SNAKE_HEAD_TILE_DOWN;
+;
+	lda     #$02
+L0009:	sta     _Snake1+5
+;
+; } 
+;
+L0007:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; unsigned char __near__ test_eating (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_test_eating: near
+
+.segment	"CODE"
+
+;
+; collision = check_collision(&Snake1, &mouse1);
+;
+	lda     #<(_Snake1)
+	ldx     #>(_Snake1)
+	jsr     pushax
+	lda     #<(_mouse1)
+	ldx     #>(_mouse1)
+	jsr     _check_collision
+	sta     _collision
+;
+; if(collision){
+;
+	lda     _collision
+	beq     L0002
+;
+; mouse1.eaten =1;
+;
+	lda     #$01
+	sta     _mouse1+9
+;
+; mouse1.respawn = 1;
+;
+	sta     _mouse1+10
+;
+; Snake1.ate =1;
+;
+	sta     _Snake1+7
+;
+; return 1;
+;
+	ldx     #$00
+	rts
+;
+; return 0;
+;
+L0002:	ldx     #$00
+	txa
+;
+; }
+;
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ draw_mouse (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_draw_mouse: near
+
+.segment	"CODE"
+
+;
+; if(mouse1.respawn =1){
+;
+	lda     #$01
+	sta     _mouse1+10
+;
+; oam_spr(mouse1.mouse_x, mouse1.mouse_y, mouse1.mouse_spr,mouse1.sprite_att );
+;
+	jsr     decsp3
+	lda     _mouse1
+	ldy     #$02
+	sta     (sp),y
+	lda     _mouse1+1
+	dey
+	sta     (sp),y
+	lda     _mouse1+7
+	dey
+	sta     (sp),y
+	lda     _mouse1+8
+	jsr     _oam_spr
+;
+; mouse1.mouse_x+=mouse1.mouse_dx;
+;
+	lda     _mouse1+4
+	clc
+	adc     _mouse1
+	sta     _mouse1
+;
+; mouse1.mouse_y+=mouse1.mouse_dy;
+;
+	lda     _mouse1+5
+	clc
+	adc     _mouse1+1
+	sta     _mouse1+1
+;
+; if(mouse1.mouse_x>=(256-8)) mouse1.mouse_dx=-mouse1.mouse_dx;
+;
+	lda     _mouse1
+	cmp     #$F8
+	bcc     L0005
+	lda     _mouse1+4
+	eor     #$FF
+	clc
+	adc     #$01
+	sta     _mouse1+4
+;
+; if(mouse1.mouse_y>=(240-8)) mouse1.mouse_dy=-mouse1.mouse_dy;
+;
+L0005:	lda     _mouse1+1
+	cmp     #$E8
+	lda     #$00
+	bcc     L0007
+	lda     _mouse1+5
+	eor     #$FF
+	clc
+	adc     #$01
+	sta     _mouse1+5
+;
+; mouse1.respawn =0;
+;
+	lda     #$00
+L0007:	sta     _mouse1+10
+;
+; }
+;
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ mouse_coord (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_mouse_coord: near
+
+.segment	"CODE"
+
+;
+; mouse1.mouse_spr=MOUSE_LEFT;
+;
+	lda     #$07
+	sta     _mouse1+7
+;
+; mouse1.mouse_x=rand8();
+;
+	jsr     _rand8
+	sta     _mouse1
+;
+; mouse1.mouse_y=rand8();
+;
+	jsr     _rand8
+	sta     _mouse1+1
+;
+; j=rand8();
+;
+	jsr     _rand8
+	sta     _j
+;
+; spr=1+(rand8()%3);
+;
+	jsr     _rand8
+	jsr     pushax
+	lda     #$03
+	jsr     tosumoda0
+	clc
+	adc     #$01
+	sta     _spr
+;
+; mouse1.mouse_dx=j&1?-spr:spr;
+;
+	lda     _j
+	and     #$01
+	beq     L0008
+	lda     _spr
+	eor     #$FF
+	clc
+	adc     #$01
+	jmp     L0009
+L0008:	lda     _spr
+L0009:	sta     _mouse1+4
+;
+; spr=1+(rand8()%3);
+;
+	jsr     _rand8
+	jsr     pushax
+	lda     #$03
+	jsr     tosumoda0
+	clc
+	adc     #$01
+	sta     _spr
+;
+; mouse1.mouse_dy=j&2?-spr:spr;
+;
+	lda     _j
+	and     #$02
+	beq     L000A
+	lda     _spr
+	eor     #$FF
+	clc
+	adc     #$01
+	jmp     L000B
+L000A:	lda     _spr
+L000B:	sta     _mouse1+5
+;
+; }
+;
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ draw_sprites (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_draw_sprites: near
+
+.segment	"CODE"
+
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; oam_spr(Snake1.x,Snake1.y,Snake1.head_sprite,Snake1.head_sprite_attribute);
+;
+	jsr     decsp3
+	lda     _Snake1
+	ldy     #$02
+	sta     (sp),y
+	lda     _Snake1+1
+	dey
+	sta     (sp),y
+	lda     _Snake1+5
+	dey
+	sta     (sp),y
+	lda     _Snake1+6
+	jmp     _oam_spr
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ respawn_mouse (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_respawn_mouse: near
+
+.segment	"CODE"
+
+;
+; if (mouse1.respawn == 1){
+;
+	lda     _mouse1+10
+	cmp     #$01
+	bne     L0002
+;
+; mouse_coord();
+;
+	jsr     _mouse_coord
+;
+; mouse1.respawn =0;
+;
+	lda     #$00
+	sta     _mouse1+10
+;
+; Snake1.ate =0;
+;
+	sta     _Snake1+7
+;
+; }
+;
+L0002:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ test1 (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_test1: near
+
+.segment	"CODE"
+
+;
+; if (test_eating()){
+;
+	jsr     _test_eating
+	tax
+	beq     L0002
+;
+; mouse_coord();
+;
+	jsr     _mouse_coord
+;
+; respawn_mouse();
+;
+L0002:	jmp     _respawn_mouse
+
+.endproc
 
 ; ---------------------------------------------------------------
 ; void __near__ fade_in (void)
@@ -1275,7 +2134,7 @@ L0003:	jmp     incsp1
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ show_title_screen (const unsigned char *pal, const unsigned char *rle)
+; void __near__ show_title_screen (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
@@ -1285,21 +2144,14 @@ L0003:	jmp     incsp1
 .segment	"CODE"
 
 ;
-; void show_title_screen(const byte* pal, const byte* rle) {
-;
-	jsr     pushax
-;
 ; ppu_off();
 ;
 	jsr     _ppu_off
 ;
-; pal_all(pal);
+; pal_all(palette);
 ;
-	ldy     #$03
-	lda     (sp),y
-	tax
-	dey
-	lda     (sp),y
+	lda     #<(_palette)
+	ldx     #>(_palette)
 	jsr     _pal_all
 ;
 ; pal_bright(0);
@@ -1307,19 +2159,16 @@ L0003:	jmp     incsp1
 	lda     #$00
 	jsr     _pal_bright
 ;
-; vram_adr(0x2000);
+; vram_adr(NAMETABLE_A);
 ;
 	ldx     #$20
 	lda     #$00
 	jsr     _vram_adr
 ;
-; vram_unrle(rle);
+; vram_unrle(titlescreen);
 ;
-	ldy     #$01
-	lda     (sp),y
-	tax
-	dey
-	lda     (sp),y
+	lda     #<(_titlescreen)
+	ldx     #>(_titlescreen)
 	jsr     _vram_unrle
 ;
 ; ppu_on_all();
@@ -1330,9 +2179,116 @@ L0003:	jmp     incsp1
 ;
 	jsr     _fade_in
 ;
-; }
+; if(pad_trigger(0)&PAD_START) {
 ;
-	jmp     incsp4
+	lda     #$00
+L0007:	jsr     _pad_trigger
+	and     #$10
+	beq     L0007
+;
+; ppu_off();
+;
+	jmp     _ppu_off
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ game_loop (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_game_loop: near
+
+.segment	"CODE"
+
+;
+; vram_adr(NAMETABLE_A);
+;
+	ldx     #$20
+	lda     #$00
+	jsr     _vram_adr
+;
+; vram_unrle(gamescreen);
+;
+	lda     #<(_gamescreen)
+	ldx     #>(_gamescreen)
+	jsr     _vram_unrle
+;
+; pal_spr(palette5);
+;
+	lda     #<(_palette5)
+	ldx     #>(_palette5)
+	jsr     _pal_spr
+;
+; pal_bright(0);
+;
+	lda     #$00
+	jsr     _pal_bright
+;
+; bank_spr(1);
+;
+	lda     #$01
+	jsr     _bank_spr
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; fade_in();
+;
+	jsr     _fade_in
+;
+; spr=0;
+;
+	lda     #$00
+	sta     _spr
+;
+; mouse_coord();
+;
+	jsr     _mouse_coord
+;
+; ppu_wait_nmi(); 
+;
+L0002:	jsr     _ppu_wait_nmi
+;
+; pad1 = pad_poll(0); // read the first controller
+;
+	lda     #$00
+	jsr     _pad_poll
+	sta     _pad1
+;
+; movement();
+;
+	jsr     _movement
+;
+; draw_sprites();
+;
+	jsr     _draw_sprites
+;
+; mouse1.respawn=1;
+;
+	lda     #$01
+	sta     _mouse1+10
+;
+; draw_mouse();
+;
+	jsr     _draw_mouse
+;
+; test1();
+;
+	jsr     _test1
+;
+; if(pad_trigger(0)&PAD_START) {
+;
+	lda     #$00
+	jsr     _pad_trigger
+	and     #$10
+	beq     L0002
+;
+; ppu_off();
+;
+	jmp     _ppu_off
 
 .endproc
 
@@ -1347,45 +2303,38 @@ L0003:	jmp     incsp1
 .segment	"CODE"
 
 ;
-; show_title_screen(palette, titlescreen);
-;
-	lda     #<(_palette)
-	ldx     #>(_palette)
-	jsr     pushax
-	lda     #<(_titlescreen)
-	ldx     #>(_titlescreen)
-	jsr     _show_title_screen
-;
 ; music_play(song);
 ;
 	lda     _song
 	jsr     _music_play
 ;
-; i=pad_trigger(0);
+; show_title_screen();
 ;
-L0002:	lda     #$00
-L0008:	jsr     _pad_trigger
-	sta     _i
+L0002:	jsr     _show_title_screen
 ;
-; if(i&PAD_A)
+; game_lives = 3;
 ;
-	and     #$80
-	beq     L0009
+	lda     #$03
+	sta     _game_lives
 ;
-; show_title_screen(palette2, gamescreen);
+; while(game_lives != 0) {
 ;
-	lda     #<(_palette2)
-	ldx     #>(_palette2)
-	jsr     pushax
-	lda     #<(_gamescreen)
-	ldx     #>(_gamescreen)
-	jsr     _show_title_screen
+	jmp     L0009
 ;
-; if(i&PAD_B)
+; game_loop();
 ;
-L0009:	lda     _i
-	and     #$40
-	beq     L0008
+L0005:	jsr     _game_loop
+;
+; while(game_lives != 0) {
+;
+L0009:	lda     _game_lives
+	bne     L0005
+;
+; if(pad_trigger(0)&PAD_SELECT)
+;
+	jsr     _pad_trigger
+	and     #$20
+	beq     L0002
 ;
 ; music_stop();
 ;
