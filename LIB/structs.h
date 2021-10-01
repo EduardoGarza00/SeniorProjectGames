@@ -1,3 +1,4 @@
+#define SNAKE_MAX_SIZE	35
 struct Snake {
 	unsigned char x;
 	unsigned char y;
@@ -7,6 +8,11 @@ struct Snake {
 	unsigned char head_sprite;
 	unsigned char head_sprite_attribute;
 	unsigned char ate;
+	unsigned char size;
+	unsigned char lastx;
+	unsigned char body;
+	unsigned char lasty;
+	unsigned char body_coor[SNAKE_MAX_SIZE <<1];
 };
 
 struct mouse{
