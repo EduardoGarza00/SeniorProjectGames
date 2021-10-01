@@ -11,6 +11,8 @@ struct Snake {
 	unsigned char size;
 	unsigned char lastx;
 	unsigned char body;
+	unsigned char bodyx;
+	unsigned char bodyy;
 	unsigned char lasty;
 	unsigned char body_coor[SNAKE_MAX_SIZE <<1];
 };
@@ -27,4 +29,5 @@ unsigned char mouse_spr;
 unsigned char sprite_att;
 unsigned char eaten;
 unsigned char respawn;
+unsigned char bounced;
 };

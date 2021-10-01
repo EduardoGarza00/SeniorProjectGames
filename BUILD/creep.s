@@ -42,6 +42,7 @@
 	.export		_l
 	.export		_k
 	.export		_collision
+	.export		_collision_body
 	.export		_address
 	.export		_x
 	.export		_y
@@ -60,27 +61,22 @@
 	.export		_test1
 	.export		_Room1
 	.export		_metatiles1
-	.export		_lives3
-	.export		_lives2
-	.export		_life
-	.export		_noscore
-	.export		_score1
-	.export		_score2
-	.export		_score3
-	.export		_score4
 	.export		_titlescreen
 	.export		_palette
 	.export		_gamescreen
 	.export		_palette2
 	.export		_winscreen
+	.export		_losescreen
 	.export		_palette5
 	.export		_song
 	.export		_pad
 	.export		_game_lives
 	.export		_s
+	.export		_bn
 	.export		_fade_in
 	.export		_show_title_screen
 	.export		_show_win_screen
+	.export		_show_lose_screen
 	.export		_game_loop
 	.export		_main
 
@@ -91,14 +87,14 @@ _Snake1:
 	.byte	$14
 	.byte	$05
 	.byte	$05
-	.res	78,$00
+	.res	80,$00
 _mouse1:
 	.byte	$50
 	.byte	$14
 	.byte	$00
 	.byte	$07
 	.byte	$00
-	.res	6,$00
+	.res	7,$00
 _updateListData:
 	.byte	$53
 	.byte	$63
@@ -111,6 +107,17 @@ _updateListData:
 	.byte	$30
 	.byte	$30
 	.byte	$30
+_lives:
+	.byte	$00
+	.byte	$4C
+	.byte	$69
+	.byte	$76
+	.byte	$65
+	.byte	$73
+	.byte	$3A
+	.byte	$9D
+	.byte	$9D
+	.byte	$9D
 
 .segment	"RODATA"
 
@@ -405,93 +412,6 @@ _metatiles1:
 	.byte	$08
 	.byte	$07
 	.byte	$00
-_lives3:
-	.byte	$4C
-	.byte	$69
-	.byte	$76
-	.byte	$65
-	.byte	$73
-	.byte	$3A
-	.byte	$9D
-	.byte	$9D
-	.byte	$9D
-_lives2:
-	.byte	$4C
-	.byte	$69
-	.byte	$76
-	.byte	$65
-	.byte	$73
-	.byte	$3A
-	.byte	$9D
-	.byte	$9D
-_life:
-	.byte	$4C
-	.byte	$69
-	.byte	$76
-	.byte	$65
-	.byte	$73
-	.byte	$3A
-	.byte	$9D
-_noscore:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$30
-	.byte	$30
-	.byte	$30
-	.byte	$30
-	.byte	$30
-_score1:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$31
-	.byte	$30
-	.byte	$33
-	.byte	$36
-	.byte	$30
-_score2:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$32
-	.byte	$32
-	.byte	$36
-	.byte	$38
-	.byte	$32
-_score3:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$33
-	.byte	$38
-	.byte	$34
-	.byte	$36
-	.byte	$31
-_score4:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$34
-	.byte	$32
-	.byte	$30
-	.byte	$36
-	.byte	$39
 _titlescreen:
 	.byte	$01
 	.byte	$9D
@@ -2313,6 +2233,630 @@ _winscreen:
 	.byte	$00
 	.byte	$01
 	.byte	$00
+_losescreen:
+	.byte	$01
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$0A
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$01
+	.byte	$27
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$13
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$B1
+	.byte	$B1
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$B9
+	.byte	$B9
+	.byte	$B1
+	.byte	$B9
+	.byte	$B1
+	.byte	$01
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$00
+	.byte	$00
+	.byte	$8D
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$00
+	.byte	$02
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$B1
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$8D
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$8D
+	.byte	$02
+	.byte	$8C
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$B3
+	.byte	$8D
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$8D
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8C
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$03
+	.byte	$8C
+	.byte	$00
+	.byte	$8E
+	.byte	$88
+	.byte	$89
+	.byte	$88
+	.byte	$89
+	.byte	$94
+	.byte	$97
+	.byte	$8C
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8C
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8F
+	.byte	$91
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$92
+	.byte	$93
+	.byte	$00
+	.byte	$8E
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8A
+	.byte	$02
+	.byte	$B3
+	.byte	$8A
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8E
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8F
+	.byte	$91
+	.byte	$F0
+	.byte	$92
+	.byte	$93
+	.byte	$00
+	.byte	$00
+	.byte	$8A
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$8A
+	.byte	$02
+	.byte	$B3
+	.byte	$8A
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8E
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$03
+	.byte	$8F
+	.byte	$89
+	.byte	$93
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$8A
+	.byte	$02
+	.byte	$F0
+	.byte	$F0
+	.byte	$8E
+	.byte	$02
+	.byte	$B3
+	.byte	$8E
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8A
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$8A
+	.byte	$00
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$8E
+	.byte	$02
+	.byte	$00
+	.byte	$02
+	.byte	$8A
+	.byte	$02
+	.byte	$B3
+	.byte	$8E
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8A
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$8A
+	.byte	$00
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8A
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$8A
+	.byte	$02
+	.byte	$B3
+	.byte	$8A
+	.byte	$02
+	.byte	$00
+	.byte	$B5
+	.byte	$8A
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$8A
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$8E
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$8A
+	.byte	$00
+	.byte	$B3
+	.byte	$8E
+	.byte	$00
+	.byte	$00
+	.byte	$B5
+	.byte	$8E
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$07
+	.byte	$8B
+	.byte	$00
+	.byte	$00
+	.byte	$99
+	.byte	$96
+	.byte	$88
+	.byte	$01
+	.byte	$03
+	.byte	$8E
+	.byte	$00
+	.byte	$B3
+	.byte	$8F
+	.byte	$89
+	.byte	$88
+	.byte	$89
+	.byte	$93
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$0B
+	.byte	$C7
+	.byte	$C7
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$95
+	.byte	$00
+	.byte	$01
+	.byte	$04
+	.byte	$C2
+	.byte	$00
+	.byte	$01
+	.byte	$05
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$D4
+	.byte	$01
+	.byte	$06
+	.byte	$C7
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$01
+	.byte	$02
+	.byte	$98
+	.byte	$00
+	.byte	$C7
+	.byte	$C7
+	.byte	$00
+	.byte	$00
+	.byte	$C2
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$C7
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$9C
+	.byte	$C7
+	.byte	$D4
+	.byte	$B9
+	.byte	$B4
+	.byte	$92
+	.byte	$94
+	.byte	$97
+	.byte	$9B
+	.byte	$91
+	.byte	$C3
+	.byte	$92
+	.byte	$88
+	.byte	$88
+	.byte	$9A
+	.byte	$C7
+	.byte	$92
+	.byte	$88
+	.byte	$88
+	.byte	$9A
+	.byte	$C7
+	.byte	$C7
+	.byte	$9C
+	.byte	$C7
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$8A
+	.byte	$C7
+	.byte	$00
+	.byte	$00
+	.byte	$B4
+	.byte	$8A
+	.byte	$C7
+	.byte	$C7
+	.byte	$B4
+	.byte	$8E
+	.byte	$C6
+	.byte	$8A
+	.byte	$C7
+	.byte	$C6
+	.byte	$C6
+	.byte	$C7
+	.byte	$8A
+	.byte	$C7
+	.byte	$01
+	.byte	$04
+	.byte	$8A
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$8A
+	.byte	$C7
+	.byte	$00
+	.byte	$C7
+	.byte	$B4
+	.byte	$8A
+	.byte	$D1
+	.byte	$C7
+	.byte	$B4
+	.byte	$8A
+	.byte	$C6
+	.byte	$8F
+	.byte	$94
+	.byte	$97
+	.byte	$8D
+	.byte	$C7
+	.byte	$95
+	.byte	$00
+	.byte	$C7
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$8A
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$95
+	.byte	$C7
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$8A
+	.byte	$C7
+	.byte	$C7
+	.byte	$B4
+	.byte	$8E
+	.byte	$C6
+	.byte	$C7
+	.byte	$C6
+	.byte	$C6
+	.byte	$8C
+	.byte	$C7
+	.byte	$99
+	.byte	$96
+	.byte	$9A
+	.byte	$C7
+	.byte	$01
+	.byte	$02
+	.byte	$8A
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$98
+	.byte	$C7
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$8E
+	.byte	$C7
+	.byte	$C7
+	.byte	$B4
+	.byte	$8E
+	.byte	$C6
+	.byte	$C6
+	.byte	$C7
+	.byte	$C6
+	.byte	$8A
+	.byte	$C7
+	.byte	$8C
+	.byte	$C7
+	.byte	$01
+	.byte	$05
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B4
+	.byte	$99
+	.byte	$96
+	.byte	$88
+	.byte	$9A
+	.byte	$B4
+	.byte	$8F
+	.byte	$9A
+	.byte	$99
+	.byte	$96
+	.byte	$93
+	.byte	$F0
+	.byte	$9B
+	.byte	$88
+	.byte	$88
+	.byte	$93
+	.byte	$C7
+	.byte	$8F
+	.byte	$88
+	.byte	$88
+	.byte	$9A
+	.byte	$00
+	.byte	$B9
+	.byte	$95
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$C3
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$B4
+	.byte	$B9
+	.byte	$01
+	.byte	$04
+	.byte	$C7
+	.byte	$B9
+	.byte	$C7
+	.byte	$B9
+	.byte	$C7
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$09
+	.byte	$B9
+	.byte	$00
+	.byte	$00
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$0E
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$1D
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$1D
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$1D
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$1C
+	.byte	$B9
+	.byte	$01
+	.byte	$02
+	.byte	$00
+	.byte	$01
+	.byte	$19
+	.byte	$B5
+	.byte	$B5
+	.byte	$00
+	.byte	$B9
+	.byte	$01
+	.byte	$22
+	.byte	$00
+	.byte	$01
+	.byte	$1C
+	.byte	$B9
+	.byte	$B9
+	.byte	$00
+	.byte	$01
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$00
 _palette5:
 	.byte	$0F
 	.byte	$09
@@ -2347,6 +2891,8 @@ _k:
 	.res	1,$00
 _collision:
 	.res	1,$00
+_collision_body:
+	.res	1,$00
 _spr:
 	.res	1,$00
 _address:
@@ -2370,6 +2916,8 @@ _pad:
 _game_lives:
 	.res	1,$00
 _s:
+	.res	1,$00
+_bn:
 	.res	1,$00
 
 ; ---------------------------------------------------------------
@@ -2396,16 +2944,10 @@ _s:
 ; Snake1.head_sprite = SNAKE_HEAD_TILE_LEFT;
 ;
 	lda     #$00
-	sta     _Snake1+5
-;
-; Snake1.body = SNAKE_BODY_HORZ;
-;
-	lda     #$04
-	sta     _Snake1+10
 ;
 ; else if (pad1 & PAD_RIGHT){
 ;
-	jmp     L000B
+	jmp     L000F
 L000A:	lda     _pad1
 	and     #$01
 	beq     L000B
@@ -2417,30 +2959,12 @@ L000A:	lda     _pad1
 ; Snake1.head_sprite = SNAKE_HEAD_TILE_RIGHT;
 ;
 	lda     #$03
-	sta     _Snake1+5
+L000F:	sta     _Snake1+5
 ;
 ; Snake1.body = SNAKE_BODY_HORZ;
 ;
 	lda     #$04
 	sta     _Snake1+10
-;
-; Snake1.lastx = Snake1.x ;
-;
-	lda     _Snake1
-	sta     _Snake1+9
-;
-; Snake1.lasty = Snake1.y - (8*(i+1));
-;
-	lda     _Snake1+1
-	jsr     pusha0
-	lda     _i
-	clc
-	adc     #$01
-	bcc     L0005
-	ldx     #$01
-L0005:	jsr     aslax3
-	jsr     tossubax
-	sta     _Snake1+11
 ;
 ; if(pad1 & PAD_UP){
 ;
@@ -2458,10 +2982,10 @@ L000B:	lda     _pad1
 ;
 ; else if (pad1 & PAD_DOWN){
 ;
-	jmp     L000E
+	jmp     L0010
 L000C:	lda     _pad1
 	and     #$04
-	beq     L0008
+	beq     L0007
 ;
 ; Snake1.y += 1;
 ;
@@ -2470,7 +2994,7 @@ L000C:	lda     _pad1
 ; Snake1.head_sprite=SNAKE_HEAD_TILE_DOWN;
 ;
 	lda     #$02
-L000E:	sta     _Snake1+5
+L0010:	sta     _Snake1+5
 ;
 ; Snake1.body = SNAKE_BODY_VERT;
 ;
@@ -2479,7 +3003,7 @@ L000E:	sta     _Snake1+5
 ;
 ; }
 ;
-L0008:	rts
+L0007:	rts
 
 .endproc
 
@@ -2591,31 +3115,45 @@ L0002:	ldx     #$00
 	adc     _mouse1+1
 	sta     _mouse1+1
 ;
-; if(mouse1.mouse_x>=(256-16)||mouse1.mouse_x<=(9)) mouse1.mouse_dx=-mouse1.mouse_dx;
+; if(mouse1.mouse_x>=(256-16)||mouse1.mouse_x<=(9)) { 
 ;
 	lda     _mouse1
 	cmp     #$F0
 	bcs     L0009
 	cmp     #$0A
 	bcs     L000A
+;
+; mouse1.mouse_dx=-mouse1.mouse_dx;
+;
 L0009:	lda     _mouse1+4
 	eor     #$FF
 	clc
 	adc     #$01
 	sta     _mouse1+4
 ;
-; if(mouse1.mouse_y>=(240-27)||mouse1.mouse_y<=(28)) mouse1.mouse_dy=-mouse1.mouse_dy;
+; mouse1.bounced += 1;
+;
+	inc     _mouse1+11
+;
+; if(mouse1.mouse_y>=(240-27)||mouse1.mouse_y<=(28)) {
 ;
 L000A:	lda     _mouse1+1
 	cmp     #$D5
 	bcs     L000B
 	cmp     #$1D
 	bcs     L000E
+;
+; mouse1.mouse_dy=-mouse1.mouse_dy;
+;
 L000B:	lda     _mouse1+5
 	eor     #$FF
 	clc
 	adc     #$01
 	sta     _mouse1+5
+;
+; mouse1.bounced += 1;
+;
+	inc     _mouse1+11
 ;
 ; mouse1.respawn =0;
 ;
@@ -2803,9 +3341,83 @@ L0002:	rts
 ;
 	lda     #$00
 	sta     _i
-L0007:	lda     _i
+L0014:	lda     _i
 	cmp     _Snake1+8
-	bcs     L0003
+	bcc     L001A
+;
+; }
+;
+	rts
+;
+; if(Snake1.head_sprite == SNAKE_HEAD_TILE_RIGHT){ 
+;
+L001A:	lda     _Snake1+5
+	cmp     #$03
+	bne     L0015
+;
+; Snake1.lastx = Snake1.x-(8*(i+1));
+;
+	lda     _Snake1
+	jsr     pusha0
+	lda     _i
+	clc
+	adc     #$01
+	bcc     L0007
+	ldx     #$01
+L0007:	jsr     aslax3
+	jsr     tossubax
+;
+; else if(Snake1.head_sprite == SNAKE_HEAD_TILE_LEFT){
+;
+	jmp     L0019
+L0015:	lda     _Snake1+5
+	bne     L0016
+;
+; Snake1.lastx = Snake1.x+ (8*(i+1));
+;
+	lda     _i
+	clc
+	adc     #$01
+	asl     a
+	asl     a
+	asl     a
+	clc
+	adc     _Snake1
+L0019:	sta     _Snake1+9
+;
+; Snake1.lasty = Snake1.y ;
+;
+	lda     _Snake1+1
+	sta     _Snake1+13
+;
+; if(Snake1.head_sprite ==SNAKE_HEAD_TILE_UP){
+;
+L0016:	lda     _Snake1+5
+	cmp     #$01
+	bne     L0017
+;
+; Snake1.lastx = Snake1.x ;
+;
+	lda     _Snake1
+	sta     _Snake1+9
+;
+; Snake1.lasty = Snake1.y + (8*(i+1));
+;
+	lda     _i
+	clc
+	adc     #$01
+	asl     a
+	asl     a
+	asl     a
+	clc
+	adc     _Snake1+1
+;
+; else if(Snake1.head_sprite == SNAKE_HEAD_TILE_DOWN){
+;
+	jmp     L0013
+L0017:	lda     _Snake1+5
+	cmp     #$02
+	bne     L000E
 ;
 ; Snake1.lastx = Snake1.x;
 ;
@@ -2819,19 +3431,19 @@ L0007:	lda     _i
 	lda     _i
 	clc
 	adc     #$01
-	bcc     L0006
+	bcc     L000F
 	ldx     #$01
-L0006:	jsr     aslax3
+L000F:	jsr     aslax3
 	jsr     tossubax
-	sta     _Snake1+11
+L0013:	sta     _Snake1+13
 ;
 ; oam_spr(Snake1.lastx,Snake1.lasty,Snake1.body,Snake1.head_sprite_attribute);
 ;
-	jsr     decsp3
+L000E:	jsr     decsp3
 	lda     _Snake1+9
 	ldy     #$02
 	sta     (sp),y
-	lda     _Snake1+11
+	lda     _Snake1+13
 	dey
 	sta     (sp),y
 	lda     _Snake1+10
@@ -2843,11 +3455,7 @@ L0006:	jsr     aslax3
 ; for(i = 0; i< Snake1.size;i++){
 ;
 	inc     _i
-	jmp     L0007
-;
-; }
-;
-L0003:	rts
+	jmp     L0014
 
 .endproc
 
@@ -3060,6 +3668,69 @@ L0007:	jsr     _pad_trigger
 .endproc
 
 ; ---------------------------------------------------------------
+; void __near__ show_lose_screen (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_show_lose_screen: near
+
+.segment	"CODE"
+
+;
+; ppu_off();
+;
+	jsr     _ppu_off
+;
+; pal_bg(palette);
+;
+	lda     #<(_palette)
+	ldx     #>(_palette)
+	jsr     _pal_bg
+;
+; pal_bright(0);
+;
+	lda     #$00
+	jsr     _pal_bright
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; vram_adr(NAMETABLE_A);
+;
+	ldx     #$20
+	lda     #$00
+	jsr     _vram_adr
+;
+; vram_unrle(losescreen);
+;
+	lda     #<(_losescreen)
+	ldx     #>(_losescreen)
+	jsr     _vram_unrle
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; fade_in();
+;
+	jsr     _fade_in
+;
+; if(pad_trigger(0)&PAD_START) {
+;
+	lda     #$00
+L0007:	jsr     _pad_trigger
+	and     #$10
+	beq     L0007
+;
+; ppu_off();
+;
+	jmp     _ppu_off
+
+.endproc
+
+; ---------------------------------------------------------------
 ; void __near__ game_loop (void)
 ; ---------------------------------------------------------------
 
@@ -3104,13 +3775,13 @@ L0007:	jsr     _pad_trigger
 	lda     #$42
 	jsr     _vram_adr
 ;
-; vram_write(lives3, 9);
+; vram_write(lives, 10);
 ;
-	lda     #<(_lives3)
-	ldx     #>(_lives3)
+	lda     #<(_lives)
+	ldx     #>(_lives)
 	jsr     pushax
 	ldx     #$00
-	lda     #$09
+	lda     #$0A
 	jsr     _vram_write
 ;
 ; ppu_on_all();
@@ -3129,6 +3800,10 @@ L0007:	jsr     _pad_trigger
 ; s=0;
 ;
 	sta     _s
+;
+; bn=0;
+;
+	sta     _bn
 ;
 ; Snake1.size=0;
 ;
@@ -3173,7 +3848,7 @@ L0002:	jsr     _ppu_wait_nmi
 ;
 	lda     _Snake1+8
 	cmp     #$01
-	bne     L0018
+	bne     L0021
 ;
 ; updateListData[6]=0x31;
 ;
@@ -3202,7 +3877,7 @@ L0002:	jsr     _ppu_wait_nmi
 ;
 ; while (s == 0) {
 ;
-	jmp     L0017
+	jmp     L0020
 ;
 ; ppu_off();
 ;
@@ -3234,14 +3909,14 @@ L0006:	jsr     _ppu_off
 ;
 ; while (s == 0) {
 ;
-L0017:	lda     _s
+L0020:	lda     _s
 	beq     L0006
 ;
 ; if(Snake1.size == 2) {
 ;
-L0018:	lda     _Snake1+8
+L0021:	lda     _Snake1+8
 	cmp     #$02
-	bne     L001A
+	bne     L0023
 ;
 ; updateListData[6]=0x33;
 ;
@@ -3270,7 +3945,7 @@ L0018:	lda     _Snake1+8
 ;
 ; while (s == 1) {
 ;
-	jmp     L0019
+	jmp     L0022
 ;
 ; ppu_off();
 ;
@@ -3302,15 +3977,15 @@ L000A:	jsr     _ppu_off
 ;
 ; while (s == 1) {
 ;
-L0019:	lda     _s
+L0022:	lda     _s
 	cmp     #$01
 	beq     L000A
 ;
 ; if(Snake1.size == 3) {
 ;
-L001A:	lda     _Snake1+8
+L0023:	lda     _Snake1+8
 	cmp     #$03
-	bne     L001C
+	bne     L0025
 ;
 ; updateListData[6]=0x34;
 ;
@@ -3339,7 +4014,7 @@ L001A:	lda     _Snake1+8
 ;
 ; while (s == 2) {
 ;
-	jmp     L001B
+	jmp     L0024
 ;
 ; ppu_off();
 ;
@@ -3371,15 +4046,15 @@ L000E:	jsr     _ppu_off
 ;
 ; while (s == 2) {
 ;
-L001B:	lda     _s
+L0024:	lda     _s
 	cmp     #$02
 	beq     L000E
 ;
 ; if(Snake1.size == 4) {
 ;
-L001C:	lda     _Snake1+8
+L0025:	lda     _Snake1+8
 	cmp     #$04
-	bne     L001E
+	bne     L0027
 ;
 ; updateListData[6]=0x34;
 ;
@@ -3408,7 +4083,7 @@ L001C:	lda     _Snake1+8
 ;
 ; while (s == 3) {
 ;
-	jmp     L001D
+	jmp     L0026
 ;
 ; ppu_off();
 ;
@@ -3440,18 +4115,132 @@ L0012:	jsr     _ppu_off
 ;
 ; while (s == 3) {
 ;
-L001D:	lda     _s
+L0026:	lda     _s
 	cmp     #$03
 	beq     L0012
 ;
 ; if(Snake1.size >= 5) {
 ;
-L001E:	lda     _Snake1+8
+L0027:	lda     _Snake1+8
 	cmp     #$05
 ;
 ; break;
 ;
-	bcs     L0003
+	bcc     L002C
+;
+; }
+;
+	rts
+;
+; if(mouse1.bounced == 10) {
+;
+L002C:	lda     _mouse1+11
+	cmp     #$0A
+	bne     L0029
+;
+; lives[7]=0x00;
+;
+	lda     #$00
+	sta     _lives+7
+;
+; while (bn == 0) {
+;
+	jmp     L0028
+;
+; ppu_off();
+;
+L0017:	jsr     _ppu_off
+;
+; vram_adr(NAMETABLE_A+0x0042);
+;
+	ldx     #$20
+	lda     #$42
+	jsr     _vram_adr
+;
+; vram_write(lives, 9);
+;
+	lda     #<(_lives)
+	ldx     #>(_lives)
+	jsr     pushax
+	ldx     #$00
+	lda     #$09
+	jsr     _vram_write
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; bn=1;
+;
+	lda     #$01
+	sta     _bn
+;
+; while (bn == 0) {
+;
+L0028:	lda     _bn
+	beq     L0017
+;
+; if(mouse1.bounced == 20) {
+;
+L0029:	lda     _mouse1+11
+	cmp     #$14
+	bne     L002B
+;
+; lives[7]=0x00;
+;
+	lda     #$00
+	sta     _lives+7
+;
+; lives[8]=0x00;
+;
+	sta     _lives+8
+;
+; while (bn == 1) {
+;
+	jmp     L002A
+;
+; ppu_off();
+;
+L001B:	jsr     _ppu_off
+;
+; vram_adr(NAMETABLE_A+0x0042);
+;
+	ldx     #$20
+	lda     #$42
+	jsr     _vram_adr
+;
+; vram_write(lives, 9);
+;
+	lda     #<(_lives)
+	ldx     #>(_lives)
+	jsr     pushax
+	ldx     #$00
+	lda     #$09
+	jsr     _vram_write
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; bn=2;
+;
+	lda     #$02
+	sta     _bn
+;
+; while (bn == 1) {
+;
+L002A:	lda     _bn
+	cmp     #$01
+	beq     L001B
+;
+; if(mouse1.bounced == 30) {
+;
+L002B:	lda     _mouse1+11
+	cmp     #$1E
+;
+; break;
+;
+	beq     L0003
 ;
 ; if(pad_trigger(0)&PAD_START) {
 ;
@@ -3481,36 +4270,36 @@ L0003:	rts
 .segment	"CODE"
 
 ;
-; music_play(song);
+; music_play(0);
 ;
-	lda     _song
+	lda     #$00
 	jsr     _music_play
-;
-; game_lives = 3;
-;
-	lda     #$03
-	sta     _game_lives
 ;
 ; show_title_screen();
 ;
 L0002:	jsr     _show_title_screen
 ;
-; while(game_lives != 0) {
-;
-	jmp     L0007
-;
 ; game_loop();
 ;
-L0005:	jsr     _game_loop
+	jsr     _game_loop
+;
+; if(mouse1.bounced == 30) {
+;
+	lda     _mouse1+11
+	cmp     #$1E
+	bne     L0008
+;
+; show_lose_screen();
+;
+	jsr     _show_lose_screen
+;
+; else {
+;
+	jmp     L0002
 ;
 ; show_win_screen();
 ;
-	jsr     _show_win_screen
-;
-; while(game_lives != 0) {
-;
-L0007:	lda     _game_lives
-	bne     L0005
+L0008:	jsr     _show_win_screen
 ;
 ; while(1) {
 ;

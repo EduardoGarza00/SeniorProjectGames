@@ -2,7 +2,7 @@
 unsigned char pad1;
 unsigned char pad2;
 unsigned char i,j,l,k;
-unsigned char collision;
+unsigned char collision, collision_body;
 static unsigned char spr;
 int address;
 unsigned char x; 
@@ -18,3 +18,10 @@ static unsigned char updateListData[11]={
 0x72,0x65,0x3a,
 0x30,0x30,0x30,0x30,0x30
 };
+static unsigned char lives[10]={
+	0x00,
+	0x4c,0x69,0x76,
+	0x65,0x73,0x3a,
+	0x9d,0x9d,0x9d
+};
+

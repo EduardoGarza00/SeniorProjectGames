@@ -8,8 +8,6 @@ void movement(void){
 		Snake1.x += 1;
 		Snake1.head_sprite = SNAKE_HEAD_TILE_RIGHT;
 		Snake1.body = SNAKE_BODY_HORZ;
-		Snake1.lastx = Snake1.x ;
-		Snake1.lasty = Snake1.y - (8*(i+1));
 	}
 	if(pad1 & PAD_UP){
 		Snake1.y -= 1;

@@ -8,12 +8,12 @@
 #include "LIB/draw_function.c"
 #include "LIB/room1.h"
 #include "LIB/metatiles.h"
-#include "LIB/stats.c"
 #include "GFX/titlescreen.h"
 #include "GFX/titlescreenPal.h"
 #include "GFX/gamescreen.h"
 #include "GFX/gamescreenPal.h"
 #include "GFX/winscreen.h"
+#include "GFX/losescreen.h"
 #include "GFX/snakePal.h"
 #pragma bss-name(push, "BSS")
 
@@ -22,9 +22,10 @@ extern const byte palette[16];
 extern const byte gamescreen[579];
 extern const byte palette2[16];
 extern const byte winscreen[565];
+extern const byte losescreen[623];
 
 //system vars used everywhere as well
-unsigned char song, k, pad, game_lives, s;
+unsigned char song, k, pad, game_lives, s, bn;
 
 void fade_in() {
 	byte vb;
@@ -79,6 +80,26 @@ void show_win_screen(void) {
 	}
 }
 
+void show_lose_screen(void) {
+	ppu_off();
+	pal_bg(palette);
+	pal_bright(0);
+	oam_clear();
+
+	vram_adr(NAMETABLE_A);
+	vram_unrle(losescreen);
+ 
+	ppu_on_all();
+	fade_in();
+	
+	while(1) {
+		if(pad_trigger(0)&PAD_START) {
+			ppu_off();
+			break;
+		}
+	}
+}
+
 void game_loop(void) {
 	
 	vram_adr(NAMETABLE_A);
@@ -88,12 +109,13 @@ void game_loop(void) {
 	
 	bank_spr(1);
 	vram_adr(NAMETABLE_A+0x0042);
-	vram_write(lives3, 9);
+	vram_write(lives, 10);
 
 	ppu_on_all();
 	fade_in();
 	spr=0;
 	s=0;
+	bn=0;
 	Snake1.size=0;
 	mouse_coord();
 	
@@ -168,6 +190,30 @@ void game_loop(void) {
 		if(Snake1.size >= 5) {
 			break;
 		}
+		if(mouse1.bounced == 10) {
+			lives[7]=0x00;
+			while (bn == 0) {
+				ppu_off();
+				vram_adr(NAMETABLE_A+0x0042);
+				vram_write(lives, 9);
+				ppu_on_all();
+				bn=1;
+			}
+		}
+		if(mouse1.bounced == 20) {
+			lives[7]=0x00;
+			lives[8]=0x00;
+			while (bn == 1) {
+				ppu_off();
+				vram_adr(NAMETABLE_A+0x0042);
+				vram_write(lives, 9);
+				ppu_on_all();
+				bn=2;
+			}
+		}
+		if(mouse1.bounced == 30) {
+			break;
+		}
 		if(pad_trigger(0)&PAD_START) {
 			ppu_off();
 			break;
@@ -177,15 +223,21 @@ void game_loop(void) {
 
 void main(void)
 {
-	music_play(song);
-	game_lives = 3;
+	music_play(0);
 	
 	while(1) {
 		
 		show_title_screen();
 		
-		while(game_lives != 0) {
+		while(1) {
 			game_loop();
+			break;
+		}
+		
+		if(mouse1.bounced == 30) {
+			show_lose_screen();
+		}
+		else {
 			show_win_screen();
 		}
 	}
