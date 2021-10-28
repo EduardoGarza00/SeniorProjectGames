@@ -18,7 +18,7 @@ void draw_mouse(void){
 
 void mouse_coord(void){
 	mouse1.mouse_spr=MOUSE_LEFT;
-	set_rand(245);
+	set_rand(200);
 	mouse1.mouse_x-=rand8();
 	mouse1.mouse_y=rand8();
 

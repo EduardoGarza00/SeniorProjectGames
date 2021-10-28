@@ -11,381 +11,159 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.forceimport	__STARTUP__
-	.import		_pal_all
 	.import		_pal_bg
 	.import		_pal_spr
-	.import		_pal_bright
 	.import		_ppu_wait_nmi
-	.import		_ppu_wait_frame
 	.import		_ppu_off
 	.import		_ppu_on_all
 	.import		_oam_clear
-	.import		_oam_spr
-	.import		_music_play
+	.import		_oam_meta_spr
 	.import		_pad_poll
-	.import		_pad_trigger
 	.import		_bank_spr
-	.import		_rand8
-	.import		_set_rand
 	.import		_vram_adr
-	.import		_vram_write
 	.import		_vram_unrle
-	.import		_check_collision
-	.export		_LeftHead
-	.export		_Uphead
-	.export		_DownHead
-	.export		_RightHead
+	.import		_memcpy
+	.import		_clear_vram_buffer
+	.import		_set_scroll_x
+	.import		_set_scroll_y
+	.import		_get_ppu_addr
+	.import		_set_data_pointer
+	.import		_set_mt_pointer
+	.import		_buffer_4_mt
+	.import		_flush_vram_update_nmi
+	.export		_runlb
+	.export		_runmid
+	.export		_runrf
+	.export		_metatiles1
+	.export		_ball1
+	.export		_ball2
+	.export		_ball3
+	.export		_ball4
+	.export		_Room1
+	.export		_Room2
+	.export		_map_loaded
+	.export		_level
+	.export		_address
+	.export		_map
+	.export		_room
+	.export		_direction
+	.export		_x
+	.export		_prevx
+	.export		_y
 	.export		_pad1
-	.export		_pad2
 	.export		_i
 	.export		_j
-	.export		_l
 	.export		_k
 	.export		_collision
-	.export		_collision_body
-	.export		_address
-	.export		_x
-	.export		_y
+	.export		_collision_L
+	.export		_collision_R
+	.export		_collision_U
+	.export		_collision_D
+	.export		_coordinates
+	.export		_temp_x
+	.export		_temp_y
+	.export		_temp1
+	.export		_temp2
+	.export		_temp3
+	.export		_temp4
+	.export		_L_R_switch
+	.export		_old_x
+	.export		_temp5
+	.export		_temp6
+	.export		_temp7
+	.export		_temp8
+	.export		_eject_L
+	.export		_eject_R
+	.export		_eject_D
+	.export		_eject_U
 	.export		_index
-	.export		_map
+	.export		_scroll_x
+	.export		_scroll_y
+	.export		_scroll_count
+	.export		_pseudo_scroll_x
+	.export		_nt
+	.export		_offset
 	.export		_c_map
-	.export		_Snake1
-	.export		_mouse1
-	.export		_movement
-	.export		_test_eating
-	.export		_draw_mouse
-	.export		_mouse_coord
+	.export		_c_map2
+	.export		_bodies
+	.export		_Rooms
+	.export		_brotate
+	.export		_Level_offsets
+	.export		_sball
+	.export		_Generic
+	.export		_Generic2
+	.export		_palette_sp
+	.export		_is_solid
 	.export		_draw_sprites
-	.export		_respawn_mouse
-	.export		_grow_snake
-	.export		_test1
-	.export		_Room1
-	.export		_metatiles1
-	.export		_titlescreen
+	.export		_load_room
+	.export		_movement
+	.export		_draw_screen_R
 	.export		_palette
-	.export		_gamescreen
-	.export		_palette2
-	.export		_winscreen
-	.export		_losescreen
-	.export		_palette5
-	.export		_song
-	.export		_pad
-	.export		_game_lives
-	.export		_s
-	.export		_bn
-	.export		_fade_in
-	.export		_show_title_screen
-	.export		_show_win_screen
-	.export		_show_lose_screen
-	.export		_game_loop
 	.export		_main
 
 .segment	"DATA"
 
-_Snake1:
-	.byte	$14
-	.byte	$14
-	.byte	$05
-	.byte	$05
-	.res	80,$00
-_mouse1:
-	.byte	$50
-	.byte	$14
-	.byte	$00
-	.byte	$07
-	.byte	$00
-	.res	7,$00
-_updateListData:
-	.byte	$53
-	.byte	$63
-	.byte	$6F
-	.byte	$72
-	.byte	$65
-	.byte	$3A
-	.byte	$30
-	.byte	$30
-	.byte	$30
-	.byte	$30
-	.byte	$30
-_lives:
-	.byte	$00
-	.byte	$4C
-	.byte	$69
-	.byte	$76
-	.byte	$65
-	.byte	$73
-	.byte	$3A
-	.byte	$9D
-	.byte	$9D
-	.byte	$9D
+_sball:
+	.word	$0014
+	.word	$0014
+	.res	4,$00
 
 .segment	"RODATA"
 
-_LeftHead:
-	.byte	$C0
-	.byte	$C0
+_runlb:
+	.byte	$F8
+	.byte	$F8
+	.byte	$08
 	.byte	$00
-	.byte	$03
+	.byte	$00
+	.byte	$F8
+	.byte	$09
+	.byte	$00
+	.byte	$F8
+	.byte	$00
+	.byte	$18
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$19
+	.byte	$00
 	.byte	$80
-_Uphead:
-	.byte	$C0
-	.byte	$C1
-	.byte	$01
-	.byte	$03
+_runmid:
+	.byte	$F8
+	.byte	$F8
+	.byte	$08
+	.byte	$00
+	.byte	$00
+	.byte	$F8
+	.byte	$09
+	.byte	$00
+	.byte	$F8
+	.byte	$00
+	.byte	$0A
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$0B
+	.byte	$00
 	.byte	$80
-_DownHead:
-	.byte	$C1
-	.byte	$C1
-	.byte	$02
-	.byte	$03
+_runrf:
+	.byte	$F8
+	.byte	$F8
+	.byte	$08
+	.byte	$00
+	.byte	$00
+	.byte	$F8
+	.byte	$09
+	.byte	$00
+	.byte	$F8
+	.byte	$00
+	.byte	$0C
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$0D
+	.byte	$00
 	.byte	$80
-_RightHead:
-	.byte	$C1
-	.byte	$3F
-	.byte	$03
-	.byte	$03
-	.byte	$80
-_Room1:
-	.byte	$01
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$04
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$04
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$04
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$03
-	.byte	$03
-	.byte	$00
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$04
 _metatiles1:
 	.byte	$02
 	.byte	$02
@@ -412,2460 +190,559 @@ _metatiles1:
 	.byte	$08
 	.byte	$07
 	.byte	$00
-_titlescreen:
-	.byte	$01
-	.byte	$9D
-	.byte	$01
-	.byte	$20
-	.byte	$B9
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
+_ball1:
+	.byte	$F1
+	.byte	$F4
 	.byte	$10
-	.byte	$01
+	.byte	$00
+	.byte	$80
+_ball2:
+	.byte	$F1
+	.byte	$F4
+	.byte	$11
+	.byte	$00
+	.byte	$80
+_ball3:
+	.byte	$F1
+	.byte	$F4
+	.byte	$12
+	.byte	$00
+	.byte	$80
+_ball4:
+	.byte	$F1
+	.byte	$F4
+	.byte	$13
+	.byte	$00
+	.byte	$80
+_Room1:
 	.byte	$04
-	.byte	$00
-	.byte	$01
-	.byte	$07
-	.byte	$B3
-	.byte	$B3
-	.byte	$00
-	.byte	$01
 	.byte	$02
-	.byte	$B2
-	.byte	$01
-	.byte	$07
-	.byte	$B9
-	.byte	$01
-	.byte	$02
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$00
-	.byte	$01
-	.byte	$0B
-	.byte	$B3
-	.byte	$B3
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$B2
-	.byte	$01
-	.byte	$02
-	.byte	$00
-	.byte	$01
 	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
+	.byte	$23
 	.byte	$00
-	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$12
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$12
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$00
+	.byte	$02
+	.byte	$04
 	.byte	$08
-	.byte	$8D
-	.byte	$00
-	.byte	$00
-	.byte	$B1
-	.byte	$B1
-	.byte	$00
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$04
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$1E
+	.byte	$01
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$1D
 	.byte	$01
 	.byte	$04
-	.byte	$8D
-	.byte	$00
+	.byte	$04
+	.byte	$02
 	.byte	$01
+	.byte	$04
+	.byte	$03
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$04
+	.byte	$02
+	.byte	$04
+	.byte	$02
+	.byte	$01
+	.byte	$04
 	.byte	$05
-	.byte	$B9
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$CA
-	.byte	$92
-	.byte	$89
-	.byte	$89
-	.byte	$94
-	.byte	$97
-	.byte	$92
-	.byte	$91
-	.byte	$00
-	.byte	$B1
-	.byte	$8C
-	.byte	$00
-	.byte	$92
-	.byte	$88
-	.byte	$88
-	.byte	$91
-	.byte	$B1
-	.byte	$9C
-	.byte	$00
-	.byte	$00
-	.byte	$8C
-	.byte	$00
-	.byte	$92
-	.byte	$89
-	.byte	$89
-	.byte	$94
-	.byte	$97
-	.byte	$9C
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$8A
-	.byte	$C6
+	.byte	$02
 	.byte	$01
+	.byte	$04
 	.byte	$03
-	.byte	$8A
-	.byte	$8F
-	.byte	$91
-	.byte	$B1
-	.byte	$8A
-	.byte	$D4
-	.byte	$8A
-	.byte	$B1
-	.byte	$B1
-	.byte	$8E
-	.byte	$B1
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$8E
-	.byte	$00
+	.byte	$02
 	.byte	$01
+	.byte	$04
+	.byte	$12
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$FE
+	.byte	$01
+	.byte	$04
+	.byte	$0A
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$09
+	.byte	$02
+	.byte	$01
+	.byte	$04
 	.byte	$03
-	.byte	$8A
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$8A
-	.byte	$D6
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$0D
+	.byte	$02
+	.byte	$04
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$03
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
 	.byte	$01
 	.byte	$02
-	.byte	$C6
-	.byte	$8A
-	.byte	$A7
-	.byte	$8A
-	.byte	$B1
-	.byte	$8A
-	.byte	$D4
-	.byte	$8A
-	.byte	$B1
-	.byte	$B1
-	.byte	$8A
-	.byte	$B1
-	.byte	$8E
-	.byte	$92
-	.byte	$88
-	.byte	$93
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$8A
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$8F
-	.byte	$88
-	.byte	$88
-	.byte	$91
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$8A
-	.byte	$B1
-	.byte	$8A
-	.byte	$D4
-	.byte	$8A
-	.byte	$9D
-	.byte	$9D
-	.byte	$8A
-	.byte	$B1
-	.byte	$8A
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$00
-	.byte	$8E
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$C6
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$8E
-	.byte	$B1
-	.byte	$8A
-	.byte	$00
-	.byte	$8A
-	.byte	$B1
-	.byte	$B3
-	.byte	$8A
-	.byte	$B1
-	.byte	$8A
-	.byte	$8F
-	.byte	$88
-	.byte	$91
-	.byte	$00
-	.byte	$8E
-	.byte	$B2
-	.byte	$B2
-	.byte	$00
-	.byte	$00
-	.byte	$95
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$8F
-	.byte	$91
-	.byte	$8A
-	.byte	$00
-	.byte	$8A
-	.byte	$B1
-	.byte	$B3
-	.byte	$8E
-	.byte	$B1
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$98
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$9B
-	.byte	$88
-	.byte	$88
-	.byte	$93
-	.byte	$C6
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$8F
-	.byte	$93
-	.byte	$00
-	.byte	$8B
-	.byte	$B1
-	.byte	$B3
-	.byte	$95
-	.byte	$C4
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$95
-	.byte	$D6
-	.byte	$8F
-	.byte	$89
-	.byte	$89
-	.byte	$9A
-	.byte	$B2
-	.byte	$9D
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$C6
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
+	.byte	$04
 	.byte	$06
-	.byte	$B3
-	.byte	$B3
-	.byte	$98
-	.byte	$B1
-	.byte	$00
 	.byte	$01
-	.byte	$02
-	.byte	$98
-	.byte	$00
-	.byte	$01
+	.byte	$04
 	.byte	$06
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$10
-	.byte	$D6
+	.byte	$02
 	.byte	$01
 	.byte	$02
+	.byte	$04
+	.byte	$13
 	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$02
 	.byte	$01
-	.byte	$07
-	.byte	$B3
+	.byte	$04
+	.byte	$02
+	.byte	$02
 	.byte	$01
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
 	.byte	$03
-	.byte	$00
 	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$18
+	.byte	$00
+	.byte	$02
+	.byte	$04
 	.byte	$0B
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$B9
-	.byte	$B9
 	.byte	$00
-	.byte	$01
-	.byte	$0B
-	.byte	$B3
-	.byte	$B3
-	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$B9
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$D1
-	.byte	$01
-	.byte	$16
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
 	.byte	$02
-	.byte	$92
-	.byte	$88
-	.byte	$89
-	.byte	$89
-	.byte	$88
-	.byte	$01
-	.byte	$02
-	.byte	$89
-	.byte	$01
-	.byte	$03
-	.byte	$91
-	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$00
-	.byte	$C3
-	.byte	$01
 	.byte	$04
+	.byte	$10
 	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
-	.byte	$00
-	.byte	$01
 	.byte	$04
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$C3
-	.byte	$C3
-	.byte	$00
-	.byte	$01
 	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
-	.byte	$00
-	.byte	$01
+	.byte	$02
 	.byte	$04
-	.byte	$8A
+	.byte	$09
 	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$86
-	.byte	$B0
-	.byte	$53
-	.byte	$54
-	.byte	$41
-	.byte	$52
-	.byte	$54
-	.byte	$99
-	.byte	$96
-	.byte	$93
-	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
-	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$C3
-	.byte	$00
-	.byte	$C3
-	.byte	$01
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
-	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8E
-	.byte	$00
-	.byte	$87
-	.byte	$B0
-	.byte	$45
-	.byte	$58
-	.byte	$49
-	.byte	$54
-	.byte	$00
-	.byte	$00
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$07
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$00
-	.byte	$C3
-	.byte	$01
 	.byte	$04
-	.byte	$00
-	.byte	$01
 	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$B0
-	.byte	$C4
-	.byte	$01
+	.byte	$02
 	.byte	$04
+	.byte	$10
 	.byte	$00
-	.byte	$01
 	.byte	$02
-	.byte	$92
-	.byte	$88
-	.byte	$9A
-	.byte	$D4
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$C3
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8E
-	.byte	$C4
-	.byte	$01
-	.byte	$05
-	.byte	$C0
-	.byte	$01
-	.byte	$03
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$C3
-	.byte	$01
-	.byte	$06
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8F
-	.byte	$88
-	.byte	$89
-	.byte	$88
-	.byte	$88
-	.byte	$89
-	.byte	$01
-	.byte	$02
-	.byte	$88
-	.byte	$88
-	.byte	$89
-	.byte	$93
-	.byte	$00
-	.byte	$01
-	.byte	$06
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$00
-	.byte	$00
-	.byte	$F6
-	.byte	$C3
-	.byte	$01
-	.byte	$02
-	.byte	$00
-	.byte	$01
 	.byte	$04
-	.byte	$B0
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
+	.byte	$0A
 	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$B7
-	.byte	$01
 	.byte	$04
-	.byte	$00
-	.byte	$01
-	.byte	$05
-	.byte	$B0
-	.byte	$B0
-	.byte	$C4
-	.byte	$C4
-	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$D1
-	.byte	$9D
-	.byte	$9D
-	.byte	$D1
-	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$04
 	.byte	$0F
-	.byte	$F5
-	.byte	$01
-	.byte	$05
-	.byte	$D1
-	.byte	$01
-	.byte	$07
-	.byte	$9D
-	.byte	$01
-	.byte	$20
 	.byte	$00
-	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$0A
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$11
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$0B
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$11
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$24
+	.byte	$00
+	.byte	$04
 	.byte	$3E
 	.byte	$00
+	.byte	$04
+	.byte	$00
+_Room2:
+	.byte	$04
+	.byte	$02
+	.byte	$04
+	.byte	$23
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$09
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$06
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$0A
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$06
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$09
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$0A
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$43
 	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$06
+	.byte	$02
+	.byte	$04
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$05
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$01
+	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$07
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$0A
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$FD
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$19
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$0D
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$03
+	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$06
+	.byte	$01
+	.byte	$04
+	.byte	$06
+	.byte	$02
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$13
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$02
+	.byte	$01
+	.byte	$01
+	.byte	$02
+	.byte	$02
+	.byte	$01
+	.byte	$01
+	.byte	$02
+	.byte	$04
+	.byte	$14
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$1D
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$12
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$11
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$08
+	.byte	$00
+	.byte	$02
+	.byte	$04
+	.byte	$12
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$07
+	.byte	$00
+	.byte	$04
+	.byte	$02
+	.byte	$02
+	.byte	$04
+	.byte	$12
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$09
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$13
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$09
+	.byte	$03
+	.byte	$02
+	.byte	$04
+	.byte	$24
+	.byte	$00
+	.byte	$04
+	.byte	$3E
+	.byte	$00
+	.byte	$04
+	.byte	$00
+_bodies:
+	.addr	_runlb
+	.addr	_runmid
+	.addr	_runrf
+_Rooms:
+	.addr	_Room1
+	.addr	_Room2
+_brotate:
+	.addr	_ball1
+	.addr	_ball2
+	.addr	_ball3
+	.addr	_ball4
+_Level_offsets:
+	.byte	$00
+	.byte	$01
+_palette_sp:
+	.byte	$0F
+	.byte	$2C
+	.byte	$0C
+	.byte	$31
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+_is_solid:
+	.byte	$00
+	.byte	$80
+	.byte	$C0
+	.byte	$80
+	.byte	$80
+	.byte	$80
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$00
 _palette:
-	.byte	$21
-	.byte	$15
-	.byte	$05
-	.byte	$1B
-	.byte	$21
-	.byte	$01
-	.byte	$21
+	.byte	$09
 	.byte	$31
-	.byte	$21
-	.byte	$06
-	.byte	$16
-	.byte	$26
-	.byte	$21
-	.byte	$09
-	.byte	$19
-	.byte	$29
-_gamescreen:
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$1E
-	.byte	$C6
-	.byte	$00
-	.byte	$12
-	.byte	$02
-	.byte	$09
-	.byte	$00
-	.byte	$00
-	.byte	$B3
-	.byte	$02
-	.byte	$05
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$13
-	.byte	$02
-	.byte	$05
-	.byte	$12
-	.byte	$12
-	.byte	$13
-	.byte	$C6
-	.byte	$00
-	.byte	$00
-	.byte	$B3
-	.byte	$02
-	.byte	$0B
-	.byte	$00
-	.byte	$02
-	.byte	$04
-	.byte	$B3
-	.byte	$02
-	.byte	$08
-	.byte	$12
-	.byte	$12
-	.byte	$00
-	.byte	$C6
-	.byte	$1E
-	.byte	$1F
-	.byte	$20
-	.byte	$1B
-	.byte	$1E
-	.byte	$20
-	.byte	$1F
-	.byte	$1E
-	.byte	$1D
-	.byte	$20
-	.byte	$1F
-	.byte	$1B
-	.byte	$1F
-	.byte	$20
-	.byte	$1B
-	.byte	$1E
-	.byte	$20
-	.byte	$1B
-	.byte	$1F
-	.byte	$20
-	.byte	$1B
-	.byte	$1F
-	.byte	$1B
-	.byte	$20
-	.byte	$1B
-	.byte	$1D
-	.byte	$1B
-	.byte	$20
-	.byte	$1B
-	.byte	$1F
-	.byte	$1E
-	.byte	$1F
-	.byte	$1F
-	.byte	$00
-	.byte	$B5
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$00
-	.byte	$02
-	.byte	$16
-	.byte	$1B
-	.byte	$1D
-	.byte	$00
-	.byte	$B5
-	.byte	$A5
-	.byte	$02
+	.byte	$30
 	.byte	$07
 	.byte	$00
-	.byte	$02
-	.byte	$0F
-	.byte	$A2
-	.byte	$02
-	.byte	$02
 	.byte	$00
-	.byte	$1D
-	.byte	$1D
 	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$06
 	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$0A
-	.byte	$16
-	.byte	$02
-	.byte	$02
-	.byte	$A2
-	.byte	$00
-	.byte	$20
-	.byte	$1F
-	.byte	$A5
-	.byte	$02
-	.byte	$0D
-	.byte	$00
-	.byte	$02
-	.byte	$07
-	.byte	$16
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$A2
-	.byte	$00
-	.byte	$1D
-	.byte	$1F
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$09
-	.byte	$C7
-	.byte	$A5
-	.byte	$02
-	.byte	$05
-	.byte	$00
-	.byte	$00
-	.byte	$16
-	.byte	$16
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$16
-	.byte	$00
-	.byte	$00
-	.byte	$1F
-	.byte	$1D
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$B5
-	.byte	$B5
-	.byte	$A5
-	.byte	$02
-	.byte	$14
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$1E
-	.byte	$20
-	.byte	$00
-	.byte	$B5
-	.byte	$A5
-	.byte	$02
-	.byte	$0A
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$0A
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$1B
-	.byte	$1B
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$A5
-	.byte	$02
-	.byte	$08
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$09
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$20
-	.byte	$20
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$0E
-	.byte	$B6
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$1E
-	.byte	$1F
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$11
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$1B
-	.byte	$20
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$06
-	.byte	$A5
-	.byte	$02
-	.byte	$08
-	.byte	$B6
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$1D
-	.byte	$1B
-	.byte	$A5
-	.byte	$02
-	.byte	$05
-	.byte	$00
-	.byte	$02
-	.byte	$07
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$A5
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$20
-	.byte	$1D
-	.byte	$A5
-	.byte	$02
-	.byte	$05
-	.byte	$00
-	.byte	$02
-	.byte	$0D
-	.byte	$A5
-	.byte	$00
-	.byte	$B6
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$1F
-	.byte	$1E
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$16
-	.byte	$00
-	.byte	$02
-	.byte	$0E
-	.byte	$A5
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$00
-	.byte	$1D
-	.byte	$20
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$16
-	.byte	$00
-	.byte	$02
-	.byte	$0D
-	.byte	$A5
-	.byte	$A5
-	.byte	$F5
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$20
-	.byte	$1D
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$16
-	.byte	$00
-	.byte	$02
-	.byte	$06
-	.byte	$A5
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$B6
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$1B
-	.byte	$1F
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$A5
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$09
-	.byte	$00
-	.byte	$1F
-	.byte	$20
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$05
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$F5
-	.byte	$B6
-	.byte	$B6
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$1B
-	.byte	$1B
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$16
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$F5
-	.byte	$00
-	.byte	$B6
-	.byte	$00
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$1F
-	.byte	$1E
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$A5
-	.byte	$02
-	.byte	$06
-	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$00
-	.byte	$00
-	.byte	$B6
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$20
-	.byte	$1D
-	.byte	$00
-	.byte	$B9
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$B6
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$A5
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$02
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$02
-	.byte	$02
-	.byte	$00
-	.byte	$1B
-	.byte	$1E
-	.byte	$00
-	.byte	$B9
-	.byte	$16
-	.byte	$02
-	.byte	$0A
-	.byte	$A5
-	.byte	$02
-	.byte	$0F
-	.byte	$00
-	.byte	$1D
-	.byte	$1D
-	.byte	$00
-	.byte	$00
-	.byte	$16
-	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$A5
-	.byte	$A5
-	.byte	$B6
-	.byte	$02
-	.byte	$02
-	.byte	$A5
-	.byte	$02
-	.byte	$03
-	.byte	$B6
-	.byte	$02
-	.byte	$03
-	.byte	$E5
-	.byte	$02
-	.byte	$03
-	.byte	$00
-	.byte	$20
-	.byte	$20
-	.byte	$00
-	.byte	$02
-	.byte	$1D
-	.byte	$20
-	.byte	$1B
-	.byte	$1D
-	.byte	$1F
-	.byte	$1B
-	.byte	$1E
-	.byte	$20
-	.byte	$1F
-	.byte	$1D
-	.byte	$1E
-	.byte	$1E
-	.byte	$1B
-	.byte	$20
-	.byte	$20
-	.byte	$1D
-	.byte	$1E
-	.byte	$1B
-	.byte	$20
-	.byte	$1D
-	.byte	$1E
-	.byte	$1B
-	.byte	$20
-	.byte	$1B
-	.byte	$1F
-	.byte	$20
-	.byte	$1D
-	.byte	$1E
-	.byte	$20
-	.byte	$1E
-	.byte	$1E
-	.byte	$20
-	.byte	$1F
-	.byte	$1E
-	.byte	$C7
-	.byte	$02
-	.byte	$1F
-	.byte	$00
-	.byte	$02
-	.byte	$0D
-	.byte	$04
-	.byte	$01
-	.byte	$00
-	.byte	$02
-	.byte	$05
-	.byte	$40
-	.byte	$00
-	.byte	$02
-	.byte	$10
-	.byte	$44
-	.byte	$00
-	.byte	$02
-	.byte	$0A
-	.byte	$10
-	.byte	$40
-	.byte	$50
-	.byte	$10
-	.byte	$00
-	.byte	$02
-	.byte	$06
-	.byte	$00
-	.byte	$02
-	.byte	$00
-_palette2:
-	.byte	$21
-	.byte	$15
-	.byte	$05
-	.byte	$1B
-	.byte	$2C
-	.byte	$27
-	.byte	$21
-	.byte	$0F
-	.byte	$2C
-	.byte	$06
-	.byte	$16
-	.byte	$26
-	.byte	$2C
-	.byte	$09
-	.byte	$19
-	.byte	$29
-_winscreen:
-	.byte	$01
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$11
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$08
-	.byte	$9D
-	.byte	$01
-	.byte	$21
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$13
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B1
-	.byte	$B1
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$B1
-	.byte	$01
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$8D
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$B1
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$8D
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$8D
-	.byte	$02
-	.byte	$8C
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$B3
-	.byte	$8D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8C
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$03
-	.byte	$8C
-	.byte	$00
-	.byte	$8E
-	.byte	$88
-	.byte	$89
-	.byte	$88
-	.byte	$89
-	.byte	$94
-	.byte	$97
-	.byte	$8C
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8C
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8F
-	.byte	$91
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$92
-	.byte	$93
-	.byte	$00
-	.byte	$8E
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8F
-	.byte	$91
-	.byte	$9D
-	.byte	$92
-	.byte	$93
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$02
-	.byte	$01
-	.byte	$03
-	.byte	$8F
-	.byte	$89
-	.byte	$93
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$02
-	.byte	$9D
-	.byte	$02
-	.byte	$8E
-	.byte	$02
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8E
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$02
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$07
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$99
-	.byte	$96
-	.byte	$88
-	.byte	$01
-	.byte	$03
-	.byte	$8E
-	.byte	$00
-	.byte	$B3
-	.byte	$8F
-	.byte	$89
-	.byte	$88
-	.byte	$89
-	.byte	$93
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$10
-	.byte	$95
-	.byte	$00
-	.byte	$01
-	.byte	$0B
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$D4
-	.byte	$01
-	.byte	$08
-	.byte	$8D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$98
-	.byte	$00
-	.byte	$01
-	.byte	$0B
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$D4
-	.byte	$01
-	.byte	$03
-	.byte	$D1
-	.byte	$00
-	.byte	$D4
-	.byte	$D4
-	.byte	$8C
-	.byte	$00
-	.byte	$01
-	.byte	$0F
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$8C
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8C
-	.byte	$00
-	.byte	$9B
-	.byte	$89
-	.byte	$8E
-	.byte	$89
-	.byte	$94
-	.byte	$00
-	.byte	$9C
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$8C
-	.byte	$00
-	.byte	$00
-	.byte	$9C
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$8E
-	.byte	$00
-	.byte	$D4
-	.byte	$D4
-	.byte	$8A
-	.byte	$D1
-	.byte	$D4
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$8A
-	.byte	$D4
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$BD
-	.byte	$D4
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$9D
-	.byte	$00
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$8E
-	.byte	$D4
-	.byte	$9D
-	.byte	$D1
-	.byte	$8A
-	.byte	$D4
-	.byte	$D4
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$9D
-	.byte	$00
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$95
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$8A
-	.byte	$9D
-	.byte	$D1
-	.byte	$9D
-	.byte	$8A
-	.byte	$D4
-	.byte	$D4
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$9D
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$98
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$C3
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$D1
-	.byte	$8B
-	.byte	$C3
-	.byte	$96
-	.byte	$88
-	.byte	$8A
-	.byte	$88
-	.byte	$9A
-	.byte	$00
-	.byte	$95
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$0C
-	.byte	$8B
-	.byte	$00
-	.byte	$01
-	.byte	$0F
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$19
-	.byte	$B5
-	.byte	$B5
-	.byte	$00
-	.byte	$00
-	.byte	$9D
-	.byte	$01
-	.byte	$21
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$9D
-	.byte	$00
-	.byte	$01
-	.byte	$3E
-	.byte	$00
-	.byte	$01
-	.byte	$00
-_losescreen:
-	.byte	$01
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$0A
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$01
-	.byte	$27
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$13
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$B1
-	.byte	$B1
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$B9
-	.byte	$B9
-	.byte	$B1
-	.byte	$B9
-	.byte	$B1
-	.byte	$01
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$00
-	.byte	$00
-	.byte	$8D
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$B1
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$8D
-	.byte	$02
-	.byte	$01
-	.byte	$04
-	.byte	$8D
-	.byte	$02
-	.byte	$8C
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$B3
-	.byte	$8D
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8D
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8C
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$03
-	.byte	$8C
-	.byte	$00
-	.byte	$8E
-	.byte	$88
-	.byte	$89
-	.byte	$88
-	.byte	$89
-	.byte	$94
-	.byte	$97
-	.byte	$8C
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8C
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8F
-	.byte	$91
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$92
-	.byte	$93
-	.byte	$00
-	.byte	$8E
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8F
-	.byte	$91
-	.byte	$F0
-	.byte	$92
-	.byte	$93
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$02
-	.byte	$01
-	.byte	$03
-	.byte	$8F
-	.byte	$89
-	.byte	$93
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$02
-	.byte	$F0
-	.byte	$F0
-	.byte	$8E
-	.byte	$02
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8E
-	.byte	$02
-	.byte	$00
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$02
-	.byte	$B3
-	.byte	$8A
-	.byte	$02
-	.byte	$00
-	.byte	$B5
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$02
-	.byte	$00
-	.byte	$00
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$B3
-	.byte	$8E
-	.byte	$00
-	.byte	$00
-	.byte	$B5
-	.byte	$8E
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$07
-	.byte	$8B
-	.byte	$00
-	.byte	$00
-	.byte	$99
-	.byte	$96
-	.byte	$88
-	.byte	$01
-	.byte	$03
-	.byte	$8E
-	.byte	$00
-	.byte	$B3
-	.byte	$8F
-	.byte	$89
-	.byte	$88
-	.byte	$89
-	.byte	$93
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$0B
-	.byte	$C7
-	.byte	$C7
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$95
-	.byte	$00
-	.byte	$01
-	.byte	$04
-	.byte	$C2
-	.byte	$00
-	.byte	$01
-	.byte	$05
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$D4
-	.byte	$01
-	.byte	$06
-	.byte	$C7
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$01
-	.byte	$02
-	.byte	$98
-	.byte	$00
-	.byte	$C7
-	.byte	$C7
-	.byte	$00
-	.byte	$00
-	.byte	$C2
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$C7
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$9C
-	.byte	$C7
-	.byte	$D4
-	.byte	$B9
-	.byte	$B4
-	.byte	$92
-	.byte	$94
-	.byte	$97
-	.byte	$9B
-	.byte	$91
-	.byte	$C3
-	.byte	$92
-	.byte	$88
-	.byte	$88
-	.byte	$9A
-	.byte	$C7
-	.byte	$92
-	.byte	$88
-	.byte	$88
-	.byte	$9A
-	.byte	$C7
-	.byte	$C7
-	.byte	$9C
-	.byte	$C7
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$8A
-	.byte	$C7
-	.byte	$00
-	.byte	$00
-	.byte	$B4
-	.byte	$8A
-	.byte	$C7
-	.byte	$C7
-	.byte	$B4
-	.byte	$8E
-	.byte	$C6
-	.byte	$8A
-	.byte	$C7
-	.byte	$C6
-	.byte	$C6
-	.byte	$C7
-	.byte	$8A
-	.byte	$C7
-	.byte	$01
-	.byte	$04
-	.byte	$8A
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$8A
-	.byte	$C7
-	.byte	$00
-	.byte	$C7
-	.byte	$B4
-	.byte	$8A
-	.byte	$D1
-	.byte	$C7
-	.byte	$B4
-	.byte	$8A
-	.byte	$C6
-	.byte	$8F
-	.byte	$94
-	.byte	$97
-	.byte	$8D
-	.byte	$C7
-	.byte	$95
-	.byte	$00
-	.byte	$C7
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$8A
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$95
-	.byte	$C7
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$8A
-	.byte	$C7
-	.byte	$C7
-	.byte	$B4
-	.byte	$8E
-	.byte	$C6
-	.byte	$C7
-	.byte	$C6
-	.byte	$C6
-	.byte	$8C
-	.byte	$C7
-	.byte	$99
-	.byte	$96
-	.byte	$9A
-	.byte	$C7
-	.byte	$01
-	.byte	$02
-	.byte	$8A
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$98
-	.byte	$C7
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$8E
-	.byte	$C7
-	.byte	$C7
-	.byte	$B4
-	.byte	$8E
-	.byte	$C6
-	.byte	$C6
-	.byte	$C7
-	.byte	$C6
-	.byte	$8A
-	.byte	$C7
-	.byte	$8C
-	.byte	$C7
-	.byte	$01
-	.byte	$05
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B4
-	.byte	$99
-	.byte	$96
-	.byte	$88
-	.byte	$9A
-	.byte	$B4
-	.byte	$8F
-	.byte	$9A
-	.byte	$99
-	.byte	$96
-	.byte	$93
-	.byte	$F0
-	.byte	$9B
-	.byte	$88
-	.byte	$88
-	.byte	$93
-	.byte	$C7
-	.byte	$8F
-	.byte	$88
-	.byte	$88
-	.byte	$9A
-	.byte	$00
-	.byte	$B9
-	.byte	$95
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$C3
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$B4
-	.byte	$B9
-	.byte	$01
-	.byte	$04
-	.byte	$C7
-	.byte	$B9
-	.byte	$C7
-	.byte	$B9
-	.byte	$C7
-	.byte	$00
-	.byte	$01
-	.byte	$02
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$03
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$09
-	.byte	$B9
-	.byte	$00
-	.byte	$00
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$0E
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$1D
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$1C
-	.byte	$B9
-	.byte	$01
-	.byte	$02
-	.byte	$00
-	.byte	$01
-	.byte	$19
-	.byte	$B5
-	.byte	$B5
-	.byte	$00
-	.byte	$B9
-	.byte	$01
-	.byte	$22
-	.byte	$00
-	.byte	$01
-	.byte	$1C
-	.byte	$B9
-	.byte	$B9
-	.byte	$00
-	.byte	$01
-	.byte	$3E
-	.byte	$00
-	.byte	$01
-	.byte	$00
-_palette5:
-	.byte	$0F
-	.byte	$09
-	.byte	$06
-	.byte	$29
-	.byte	$0F
-	.byte	$06
-	.byte	$16
-	.byte	$26
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -2877,386 +754,98 @@ _palette5:
 
 .segment	"BSS"
 
-_pad1:
+_map_loaded:
 	.res	1,$00
-_pad2:
+_level:
+	.res	1,$00
+_address:
+	.res	2,$00
+_map:
+	.res	1,$00
+_room:
+	.res	1,$00
+_direction:
+	.res	1,$00
+_x:
+	.res	1,$00
+_prevx:
+	.res	1,$00
+_y:
+	.res	1,$00
+_pad1:
 	.res	1,$00
 _i:
 	.res	1,$00
 _j:
 	.res	1,$00
-_l:
-	.res	1,$00
 _k:
 	.res	1,$00
 _collision:
 	.res	1,$00
-_collision_body:
+_collision_L:
 	.res	1,$00
-_spr:
+_collision_R:
 	.res	1,$00
-_address:
+_collision_U:
+	.res	1,$00
+_collision_D:
+	.res	1,$00
+_coordinates:
+	.res	1,$00
+_temp_x:
+	.res	1,$00
+_temp_y:
+	.res	1,$00
+_temp1:
+	.res	1,$00
+_temp2:
+	.res	1,$00
+_temp3:
+	.res	1,$00
+_temp4:
+	.res	1,$00
+_L_R_switch:
+	.res	1,$00
+_old_x:
+	.res	1,$00
+_temp5:
 	.res	2,$00
-_x:
+_temp6:
+	.res	2,$00
+_temp7:
+	.res	2,$00
+_temp8:
+	.res	2,$00
+_eject_L:
 	.res	1,$00
-_y:
+_eject_R:
+	.res	1,$00
+_eject_D:
+	.res	1,$00
+_eject_U:
 	.res	1,$00
 _index:
 	.res	1,$00
-_map:
+_scroll_x:
+	.res	2,$00
+_scroll_y:
+	.res	2,$00
+_scroll_count:
+	.res	1,$00
+_pseudo_scroll_x:
+	.res	2,$00
+_nt:
+	.res	1,$00
+_offset:
 	.res	1,$00
 _c_map:
-	.res	522,$00
-_snakeVram:
-	.res	106,$00
-_song:
-	.res	1,$00
-_pad:
-	.res	1,$00
-_game_lives:
-	.res	1,$00
-_s:
-	.res	1,$00
-_bn:
-	.res	1,$00
-
-; ---------------------------------------------------------------
-; void __near__ movement (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_movement: near
-
-.segment	"CODE"
-
-;
-; if(pad1 & PAD_LEFT) {
-;
-	lda     _pad1
-	and     #$02
-	beq     L000A
-;
-; Snake1.x -= 1;
-;
-	dec     _Snake1
-;
-; Snake1.head_sprite = SNAKE_HEAD_TILE_LEFT;
-;
-	lda     #$00
-;
-; else if (pad1 & PAD_RIGHT){
-;
-	jmp     L000F
-L000A:	lda     _pad1
-	and     #$01
-	beq     L000B
-;
-; Snake1.x += 1;
-;
-	inc     _Snake1
-;
-; Snake1.head_sprite = SNAKE_HEAD_TILE_RIGHT;
-;
-	lda     #$03
-L000F:	sta     _Snake1+5
-;
-; Snake1.body = SNAKE_BODY_HORZ;
-;
-	lda     #$04
-	sta     _Snake1+10
-;
-; if(pad1 & PAD_UP){
-;
-L000B:	lda     _pad1
-	and     #$08
-	beq     L000C
-;
-; Snake1.y -= 1;
-;
-	dec     _Snake1+1
-;
-; Snake1.head_sprite=SNAKE_HEAD_TILE_UP;
-;
-	lda     #$01
-;
-; else if (pad1 & PAD_DOWN){
-;
-	jmp     L0010
-L000C:	lda     _pad1
-	and     #$04
-	beq     L0007
-;
-; Snake1.y += 1;
-;
-	inc     _Snake1+1
-;
-; Snake1.head_sprite=SNAKE_HEAD_TILE_DOWN;
-;
-	lda     #$02
-L0010:	sta     _Snake1+5
-;
-; Snake1.body = SNAKE_BODY_VERT;
-;
-	lda     #$05
-	sta     _Snake1+10
-;
-; }
-;
-L0007:	rts
-
-.endproc
-
-; ---------------------------------------------------------------
-; unsigned char __near__ test_eating (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_test_eating: near
-
-.segment	"CODE"
-
-;
-; collision = check_collision(&Snake1, &mouse1);
-;
-	lda     #<(_Snake1)
-	ldx     #>(_Snake1)
-	jsr     pushax
-	lda     #<(_mouse1)
-	ldx     #>(_mouse1)
-	jsr     _check_collision
-	sta     _collision
-;
-; if(collision){
-;
-	lda     _collision
-	beq     L0002
-;
-; mouse1.eaten =1;
-;
-	lda     #$01
-	sta     _mouse1+9
-;
-; mouse1.respawn = 1;
-;
-	sta     _mouse1+10
-;
-; Snake1.ate = 1;
-;
-	sta     _Snake1+7
-;
-; Snake1.size = Snake1.size+1;
-;
-	lda     _Snake1+8
-	clc
-	adc     #$01
-	sta     _Snake1+8
-;
-; return 1;
-;
-	ldx     #$00
-	lda     #$01
-	rts
-;
-; return 0;
-;
-L0002:	ldx     #$00
-	txa
-;
-; }
-;
-	rts
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ draw_mouse (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_draw_mouse: near
-
-.segment	"CODE"
-
-;
-; if(mouse1.respawn =1){
-;
-	lda     #$01
-	sta     _mouse1+10
-;
-; oam_spr(mouse1.mouse_x, mouse1.mouse_y, mouse1.mouse_spr,mouse1.sprite_att );
-;
-	jsr     decsp3
-	lda     _mouse1
-	ldy     #$02
-	sta     (sp),y
-	lda     _mouse1+1
-	dey
-	sta     (sp),y
-	lda     _mouse1+7
-	dey
-	sta     (sp),y
-	lda     _mouse1+8
-	jsr     _oam_spr
-;
-; mouse1.mouse_x+=mouse1.mouse_dx;
-;
-	lda     _mouse1+4
-	clc
-	adc     _mouse1
-	sta     _mouse1
-;
-; mouse1.mouse_y+=mouse1.mouse_dy;
-;
-	lda     _mouse1+5
-	clc
-	adc     _mouse1+1
-	sta     _mouse1+1
-;
-; if(mouse1.mouse_x>=(256-16)||mouse1.mouse_x<=(9)) { 
-;
-	lda     _mouse1
-	cmp     #$F0
-	bcs     L0009
-	cmp     #$0A
-	bcs     L000A
-;
-; mouse1.mouse_dx=-mouse1.mouse_dx;
-;
-L0009:	lda     _mouse1+4
-	eor     #$FF
-	clc
-	adc     #$01
-	sta     _mouse1+4
-;
-; mouse1.bounced += 1;
-;
-	inc     _mouse1+11
-;
-; if(mouse1.mouse_y>=(240-27)||mouse1.mouse_y<=(28)) {
-;
-L000A:	lda     _mouse1+1
-	cmp     #$D5
-	bcs     L000B
-	cmp     #$1D
-	bcs     L000E
-;
-; mouse1.mouse_dy=-mouse1.mouse_dy;
-;
-L000B:	lda     _mouse1+5
-	eor     #$FF
-	clc
-	adc     #$01
-	sta     _mouse1+5
-;
-; mouse1.bounced += 1;
-;
-	inc     _mouse1+11
-;
-; mouse1.respawn =0;
-;
-L000E:	lda     #$00
-	sta     _mouse1+10
-;
-; }
-;
-	rts
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ mouse_coord (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_mouse_coord: near
-
-.segment	"CODE"
-
-;
-; mouse1.mouse_spr=MOUSE_LEFT;
-;
-	lda     #$07
-	sta     _mouse1+7
-;
-; set_rand(245);
-;
-	ldx     #$00
-	lda     #$F5
-	jsr     _set_rand
-;
-; mouse1.mouse_x-=rand8();
-;
-	jsr     _rand8
-	eor     #$FF
-	sec
-	adc     _mouse1
-	sta     _mouse1
-;
-; mouse1.mouse_y=rand8();
-;
-	jsr     _rand8
-	sta     _mouse1+1
-;
-; j=rand8();
-;
-	jsr     _rand8
-	sta     _j
-;
-; spr=1+(rand8()%3);
-;
-	jsr     _rand8
-	jsr     pushax
-	lda     #$03
-	jsr     tosumoda0
-	clc
-	adc     #$01
-	sta     _spr
-;
-; mouse1.mouse_dx=j&1?-spr:spr;
-;
-	lda     _j
-	and     #$01
-	beq     L0008
-	lda     _spr
-	eor     #$FF
-	clc
-	adc     #$01
-	jmp     L0009
-L0008:	lda     _spr
-L0009:	sta     _mouse1+4
-;
-; spr=1+(rand8()%3);
-;
-	jsr     _rand8
-	jsr     pushax
-	lda     #$03
-	jsr     tosumoda0
-	clc
-	adc     #$01
-	sta     _spr
-;
-; mouse1.mouse_dy=j&2?-spr:spr;
-;
-	lda     _j
-	and     #$02
-	beq     L000A
-	lda     _spr
-	eor     #$FF
-	clc
-	adc     #$01
-	jmp     L000B
-L000A:	lda     _spr
-L000B:	sta     _mouse1+5
-;
-; }
-;
-	rts
-
-.endproc
+	.res	240,$00
+_c_map2:
+	.res	240,$00
+_Generic:
+	.res	4,$00
+_Generic2:
+	.res	4,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ draw_sprites (void)
@@ -3273,989 +862,796 @@ L000B:	sta     _mouse1+5
 ;
 	jsr     _oam_clear
 ;
-; oam_spr(Snake1.x,Snake1.y,Snake1.head_sprite,Snake1.head_sprite_attribute);
+; temp_x = high_byte(sball.x);
 ;
-	jsr     decsp3
-	lda     _Snake1
-	ldy     #$02
+	lda     _sball+1
+	sta     _temp_x
+;
+; temp_y = high_byte(sball.y);
+;
+	lda     _sball+3
+	sta     _temp_y
+;
+; oam_meta_spr(temp_x,temp_y,brotate[k]); 
+;
+	jsr     decsp2
+	lda     _temp_x
+	ldy     #$01
 	sta     (sp),y
-	lda     _Snake1+1
+	lda     _temp_y
 	dey
 	sta     (sp),y
-	lda     _Snake1+5
-	dey
-	sta     (sp),y
-	lda     _Snake1+6
-	jmp     _oam_spr
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ respawn_mouse (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_respawn_mouse: near
-
-.segment	"CODE"
-
-;
-; if (mouse1.respawn == 1){
-;
-	lda     _mouse1+10
-	cmp     #$01
-	bne     L0002
-;
-; mouse_coord();
-;
-	jsr     _mouse_coord
-;
-; mouse1.respawn =0;
-;
-	lda     #$00
-	sta     _mouse1+10
-;
-; Snake1.ate =0;
-;
-	sta     _Snake1+7
-;
-; }
-;
-L0002:	rts
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ grow_snake (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_grow_snake: near
-
-.segment	"CODE"
-
-;
-; for(i = 0; i< Snake1.size;i++){
-;
-	lda     #$00
-	sta     _i
-L0014:	lda     _i
-	cmp     _Snake1+8
-	bcc     L001A
-;
-; }
-;
-	rts
-;
-; if(Snake1.head_sprite == SNAKE_HEAD_TILE_RIGHT){ 
-;
-L001A:	lda     _Snake1+5
-	cmp     #$03
-	bne     L0015
-;
-; Snake1.lastx = Snake1.x-(8*(i+1));
-;
-	lda     _Snake1
-	jsr     pusha0
-	lda     _i
-	clc
-	adc     #$01
-	bcc     L0007
-	ldx     #$01
-L0007:	jsr     aslax3
-	jsr     tossubax
-;
-; else if(Snake1.head_sprite == SNAKE_HEAD_TILE_LEFT){
-;
-	jmp     L0019
-L0015:	lda     _Snake1+5
-	bne     L0016
-;
-; Snake1.lastx = Snake1.x+ (8*(i+1));
-;
-	lda     _i
-	clc
-	adc     #$01
+	ldx     #$00
+	lda     _k
 	asl     a
-	asl     a
-	asl     a
+	bcc     L0003
+	inx
 	clc
-	adc     _Snake1
-L0019:	sta     _Snake1+9
-;
-; Snake1.lasty = Snake1.y ;
-;
-	lda     _Snake1+1
-	sta     _Snake1+13
-;
-; if(Snake1.head_sprite ==SNAKE_HEAD_TILE_UP){
-;
-L0016:	lda     _Snake1+5
-	cmp     #$01
-	bne     L0017
-;
-; Snake1.lastx = Snake1.x ;
-;
-	lda     _Snake1
-	sta     _Snake1+9
-;
-; Snake1.lasty = Snake1.y + (8*(i+1));
-;
-	lda     _i
-	clc
-	adc     #$01
-	asl     a
-	asl     a
-	asl     a
-	clc
-	adc     _Snake1+1
-;
-; else if(Snake1.head_sprite == SNAKE_HEAD_TILE_DOWN){
-;
-	jmp     L0013
-L0017:	lda     _Snake1+5
-	cmp     #$02
-	bne     L000E
-;
-; Snake1.lastx = Snake1.x;
-;
-	lda     _Snake1
-	sta     _Snake1+9
-;
-; Snake1.lasty = Snake1.y - (8*(i+1));
-;
-	lda     _Snake1+1
-	jsr     pusha0
-	lda     _i
-	clc
-	adc     #$01
-	bcc     L000F
-	ldx     #$01
-L000F:	jsr     aslax3
-	jsr     tossubax
-L0013:	sta     _Snake1+13
-;
-; oam_spr(Snake1.lastx,Snake1.lasty,Snake1.body,Snake1.head_sprite_attribute);
-;
-L000E:	jsr     decsp3
-	lda     _Snake1+9
-	ldy     #$02
-	sta     (sp),y
-	lda     _Snake1+13
-	dey
-	sta     (sp),y
-	lda     _Snake1+10
-	dey
-	sta     (sp),y
-	lda     _Snake1+6
-	jsr     _oam_spr
-;
-; for(i = 0; i< Snake1.size;i++){
-;
-	inc     _i
-	jmp     L0014
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ test1 (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_test1: near
-
-.segment	"CODE"
-
-;
-; if (test_eating()){
-;
-	jsr     _test_eating
+L0003:	adc     #<(_brotate)
+	sta     ptr1
+	txa
+	adc     #>(_brotate)
+	sta     ptr1+1
+	iny
+	lda     (ptr1),y
 	tax
-	beq     L0002
-;
-; mouse_coord();
-;
-	jsr     _mouse_coord
-;
-; respawn_mouse();
-;
-L0002:	jsr     _respawn_mouse
-;
-; grow_snake();
-;
-	jmp     _grow_snake
+	dey
+	lda     (ptr1),y
+	jmp     _oam_meta_spr
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ fade_in (void)
+; void __near__ load_room (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_fade_in: near
+.proc	_load_room: near
 
 .segment	"CODE"
 
 ;
-; for (vb=0; vb<=4; vb++) {
+; offset = 0;
 ;
-	jsr     decsp1
 	lda     #$00
-	tay
-L0006:	sta     (sp),y
-	cmp     #$05
-	bcs     L0003
+	sta     _offset
 ;
-; pal_bright(vb);
+; set_data_pointer(Rooms[offset]);
 ;
-	lda     (sp),y
-	jsr     _pal_bright
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; for (vb=0; vb<=4; vb++) {
-;
-	ldy     #$00
+	tax
+	lda     _offset
+	asl     a
+	bcc     L0018
+	inx
 	clc
-	lda     #$01
-	adc     (sp),y
-	jmp     L0006
+L0018:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     _set_data_pointer
 ;
-; }
+; set_mt_pointer(metatiles1);
 ;
-L0003:	jmp     incsp1
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ show_title_screen (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_show_title_screen: near
-
-.segment	"CODE"
-
+	lda     #<(_metatiles1)
+	ldx     #>(_metatiles1)
+	jsr     _set_mt_pointer
 ;
-; ppu_off();
-;
-	jsr     _ppu_off
-;
-; pal_all(palette);
-;
-	lda     #<(_palette)
-	ldx     #>(_palette)
-	jsr     _pal_all
-;
-; pal_bright(0);
+; for(y=0; ;y+=0x20){ 
 ;
 	lda     #$00
-	jsr     _pal_bright
+L0016:	sta     _y
 ;
-; vram_adr(NAMETABLE_A);
-;
-	ldx     #$20
-	lda     #$00
-	jsr     _vram_adr
-;
-; vram_unrle(titlescreen);
-;
-	lda     #<(_titlescreen)
-	ldx     #>(_titlescreen)
-	jsr     _vram_unrle
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; fade_in();
-;
-	jsr     _fade_in
-;
-; if(pad_trigger(0)&PAD_START) {
+; for(x=0; ;x+=0x20){
 ;
 	lda     #$00
-L0007:	jsr     _pad_trigger
-	and     #$10
-	beq     L0007
+L0015:	sta     _x
 ;
-; ppu_off();
+; clear_vram_buffer(); // do each frame, and before putting anything in the buffer
 ;
-	jmp     _ppu_off
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ show_win_screen (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_show_win_screen: near
-
-.segment	"CODE"
-
+	jsr     _clear_vram_buffer
 ;
-; ppu_off();
+; address = get_ppu_addr(0, x, y);
 ;
-	jsr     _ppu_off
-;
-; pal_bg(palette);
-;
-	lda     #<(_palette)
-	ldx     #>(_palette)
-	jsr     _pal_bg
-;
-; pal_bright(0);
-;
+	jsr     decsp2
 	lda     #$00
-	jsr     _pal_bright
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     _y
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
 ;
-; oam_clear();
+; index = (y & 0xf0) + (x >> 4);
 ;
-	jsr     _oam_clear
+	lda     _y
+	and     #$F0
+	sta     ptr1
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     ptr1
+	sta     _index
 ;
-; vram_adr(NAMETABLE_A);
+; buffer_4_mt(address, index); // ppu_address, index to the data
 ;
-	ldx     #$20
-	lda     #$00
-	jsr     _vram_adr
-;
-; vram_unrle(winscreen);
-;
-	lda     #<(_winscreen)
-	ldx     #>(_winscreen)
-	jsr     _vram_unrle
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; fade_in();
-;
-	jsr     _fade_in
-;
-; if(pad_trigger(0)&PAD_START) {
-;
-	lda     #$00
-L0007:	jsr     _pad_trigger
-	and     #$10
-	beq     L0007
-;
-; ppu_off();
-;
-	jmp     _ppu_off
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ show_lose_screen (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_show_lose_screen: near
-
-.segment	"CODE"
-
-;
-; ppu_off();
-;
-	jsr     _ppu_off
-;
-; pal_bg(palette);
-;
-	lda     #<(_palette)
-	ldx     #>(_palette)
-	jsr     _pal_bg
-;
-; pal_bright(0);
-;
-	lda     #$00
-	jsr     _pal_bright
-;
-; oam_clear();
-;
-	jsr     _oam_clear
-;
-; vram_adr(NAMETABLE_A);
-;
-	ldx     #$20
-	lda     #$00
-	jsr     _vram_adr
-;
-; vram_unrle(losescreen);
-;
-	lda     #<(_losescreen)
-	ldx     #>(_losescreen)
-	jsr     _vram_unrle
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; fade_in();
-;
-	jsr     _fade_in
-;
-; if(pad_trigger(0)&PAD_START) {
-;
-	lda     #$00
-L0007:	jsr     _pad_trigger
-	and     #$10
-	beq     L0007
-;
-; ppu_off();
-;
-	jmp     _ppu_off
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ game_loop (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_game_loop: near
-
-.segment	"CODE"
-
-;
-; vram_adr(NAMETABLE_A);
-;
-	ldx     #$20
-	lda     #$00
-	jsr     _vram_adr
-;
-; vram_unrle(gamescreen);
-;
-	lda     #<(_gamescreen)
-	ldx     #>(_gamescreen)
-	jsr     _vram_unrle
-;
-; pal_spr(palette5);
-;
-	lda     #<(_palette5)
-	ldx     #>(_palette5)
-	jsr     _pal_spr
-;
-; pal_bright(0);
-;
-	lda     #$00
-	jsr     _pal_bright
-;
-; bank_spr(1);
-;
-	lda     #$01
-	jsr     _bank_spr
-;
-; vram_adr(NAMETABLE_A+0x0042);
-;
-	ldx     #$20
-	lda     #$42
-	jsr     _vram_adr
-;
-; vram_write(lives, 10);
-;
-	lda     #<(_lives)
-	ldx     #>(_lives)
+	lda     _address
+	ldx     _address+1
 	jsr     pushax
-	ldx     #$00
-	lda     #$0A
-	jsr     _vram_write
+	lda     _index
+	jsr     _buffer_4_mt
 ;
-; ppu_on_all();
+; flush_vram_update_nmi();
 ;
-	jsr     _ppu_on_all
+	jsr     _flush_vram_update_nmi
 ;
-; fade_in();
+; if (x == 0xe0) break;
 ;
-	jsr     _fade_in
-;
-; spr=0;
-;
-	lda     #$00
-	sta     _spr
-;
-; s=0;
-;
-	sta     _s
-;
-; bn=0;
-;
-	sta     _bn
-;
-; Snake1.size=0;
-;
-	sta     _Snake1+8
-;
-; mouse_coord();
-;
-	jsr     _mouse_coord
-;
-; ppu_wait_nmi(); 
-;
-L0002:	jsr     _ppu_wait_nmi
-;
-; pad1 = pad_poll(0); // read the first controller
-;
-	lda     #$00
-	jsr     _pad_poll
-	sta     _pad1
-;
-; movement();
-;
-	jsr     _movement
-;
-; draw_sprites();
-;
-	jsr     _draw_sprites
-;
-; mouse1.respawn=1;
-;
-	lda     #$01
-	sta     _mouse1+10
-;
-; draw_mouse();
-;
-	jsr     _draw_mouse
-;
-; test1();
-;
-	jsr     _test1
-;
-; if(Snake1.size == 1) {
-;
-	lda     _Snake1+8
-	cmp     #$01
-	bne     L0021
-;
-; updateListData[6]=0x31;
-;
-	lda     #$31
-	sta     _updateListData+6
-;
-; updateListData[7]=0x32;
-;
-	lda     #$32
-	sta     _updateListData+7
-;
-; updateListData[8]=0x37;
-;
-	lda     #$37
-	sta     _updateListData+8
-;
-; updateListData[9]=0x31;
-;
-	lda     #$31
-	sta     _updateListData+9
-;
-; updateListData[10]=0x38;
-;
-	lda     #$38
-	sta     _updateListData+10
-;
-; while (s == 0) {
-;
-	jmp     L0020
-;
-; ppu_off();
-;
-L0006:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0053);
-;
-	ldx     #$20
-	lda     #$53
-	jsr     _vram_adr
-;
-; vram_write(updateListData, 11);
-;
-	lda     #<(_updateListData)
-	ldx     #>(_updateListData)
-	jsr     pushax
-	ldx     #$00
-	lda     #$0B
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; s=1;
-;
-	lda     #$01
-	sta     _s
-;
-; while (s == 0) {
-;
-L0020:	lda     _s
-	beq     L0006
-;
-; if(Snake1.size == 2) {
-;
-L0021:	lda     _Snake1+8
-	cmp     #$02
-	bne     L0023
-;
-; updateListData[6]=0x33;
-;
-	lda     #$33
-	sta     _updateListData+6
-;
-; updateListData[7]=0x36;
-;
-	lda     #$36
-	sta     _updateListData+7
-;
-; updateListData[8]=0x39;
-;
-	lda     #$39
-	sta     _updateListData+8
-;
-; updateListData[9]=0x31;
-;
-	lda     #$31
-	sta     _updateListData+9
-;
-; updateListData[10]=0x38;
-;
-	lda     #$38
-	sta     _updateListData+10
-;
-; while (s == 1) {
-;
-	jmp     L0022
-;
-; ppu_off();
-;
-L000A:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0053);
-;
-	ldx     #$20
-	lda     #$53
-	jsr     _vram_adr
-;
-; vram_write(updateListData, 11);
-;
-	lda     #<(_updateListData)
-	ldx     #>(_updateListData)
-	jsr     pushax
-	ldx     #$00
-	lda     #$0B
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; s=2;
-;
-	lda     #$02
-	sta     _s
-;
-; while (s == 1) {
-;
-L0022:	lda     _s
-	cmp     #$01
-	beq     L000A
-;
-; if(Snake1.size == 3) {
-;
-L0023:	lda     _Snake1+8
-	cmp     #$03
-	bne     L0025
-;
-; updateListData[6]=0x34;
-;
-	lda     #$34
-	sta     _updateListData+6
-;
-; updateListData[7]=0x31;
-;
-	lda     #$31
-	sta     _updateListData+7
-;
-; updateListData[8]=0x35;
-;
-	lda     #$35
-	sta     _updateListData+8
-;
-; updateListData[9]=0x31;
-;
-	lda     #$31
-	sta     _updateListData+9
-;
-; updateListData[10]=0x39;
-;
-	lda     #$39
-	sta     _updateListData+10
-;
-; while (s == 2) {
-;
-	jmp     L0024
-;
-; ppu_off();
-;
-L000E:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0053);
-;
-	ldx     #$20
-	lda     #$53
-	jsr     _vram_adr
-;
-; vram_write(updateListData, 11);
-;
-	lda     #<(_updateListData)
-	ldx     #>(_updateListData)
-	jsr     pushax
-	ldx     #$00
-	lda     #$0B
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; s=3;
-;
-	lda     #$03
-	sta     _s
-;
-; while (s == 2) {
-;
-L0024:	lda     _s
-	cmp     #$02
-	beq     L000E
-;
-; if(Snake1.size == 4) {
-;
-L0025:	lda     _Snake1+8
-	cmp     #$04
-	bne     L0027
-;
-; updateListData[6]=0x34;
-;
-	lda     #$34
-	sta     _updateListData+6
-;
-; updateListData[7]=0x32;
-;
-	lda     #$32
-	sta     _updateListData+7
-;
-; updateListData[8]=0x30;
-;
-	lda     #$30
-	sta     _updateListData+8
-;
-; updateListData[9]=0x36;
-;
-	lda     #$36
-	sta     _updateListData+9
-;
-; updateListData[10]=0x39;
-;
-	lda     #$39
-	sta     _updateListData+10
-;
-; while (s == 3) {
-;
-	jmp     L0026
-;
-; ppu_off();
-;
-L0012:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0053);
-;
-	ldx     #$20
-	lda     #$53
-	jsr     _vram_adr
-;
-; vram_write(updateListData, 11);
-;
-	lda     #<(_updateListData)
-	ldx     #>(_updateListData)
-	jsr     pushax
-	ldx     #$00
-	lda     #$0B
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; s=4;
-;
-	lda     #$04
-	sta     _s
-;
-; while (s == 3) {
-;
-L0026:	lda     _s
-	cmp     #$03
-	beq     L0012
-;
-; if(Snake1.size >= 5) {
-;
-L0027:	lda     _Snake1+8
-	cmp     #$05
-;
-; break;
-;
-	bcc     L002C
-;
-; }
-;
-	rts
-;
-; if(mouse1.bounced == 10) {
-;
-L002C:	lda     _mouse1+11
-	cmp     #$0A
-	bne     L0029
-;
-; lives[7]=0x00;
-;
-	lda     #$00
-	sta     _lives+7
-;
-; while (bn == 0) {
-;
-	jmp     L0028
-;
-; ppu_off();
-;
-L0017:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0042);
-;
-	ldx     #$20
-	lda     #$42
-	jsr     _vram_adr
-;
-; vram_write(lives, 9);
-;
-	lda     #<(_lives)
-	ldx     #>(_lives)
-	jsr     pushax
-	ldx     #$00
-	lda     #$09
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; bn=1;
-;
-	lda     #$01
-	sta     _bn
-;
-; while (bn == 0) {
-;
-L0028:	lda     _bn
-	beq     L0017
-;
-; if(mouse1.bounced == 20) {
-;
-L0029:	lda     _mouse1+11
-	cmp     #$14
-	bne     L002B
-;
-; lives[7]=0x00;
-;
-	lda     #$00
-	sta     _lives+7
-;
-; lives[8]=0x00;
-;
-	sta     _lives+8
-;
-; while (bn == 1) {
-;
-	jmp     L002A
-;
-; ppu_off();
-;
-L001B:	jsr     _ppu_off
-;
-; vram_adr(NAMETABLE_A+0x0042);
-;
-	ldx     #$20
-	lda     #$42
-	jsr     _vram_adr
-;
-; vram_write(lives, 9);
-;
-	lda     #<(_lives)
-	ldx     #>(_lives)
-	jsr     pushax
-	ldx     #$00
-	lda     #$09
-	jsr     _vram_write
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; bn=2;
-;
-	lda     #$02
-	sta     _bn
-;
-; while (bn == 1) {
-;
-L002A:	lda     _bn
-	cmp     #$01
+	lda     _x
+	cmp     #$E0
 	beq     L001B
 ;
-; if(mouse1.bounced == 30) {
+; for(x=0; ;x+=0x20){
 ;
-L002B:	lda     _mouse1+11
-	cmp     #$1E
+	lda     #$20
+	clc
+	adc     _x
+	jmp     L0015
 ;
-; break;
+; if (y == 0xe0) break;
 ;
-	beq     L0003
+L001B:	lda     _y
+	cmp     #$E0
+	beq     L001C
 ;
-; if(pad_trigger(0)&PAD_START) {
+; for(y=0; ;y+=0x20){ 
+;
+	lda     #$20
+	clc
+	adc     _y
+	jmp     L0016
+;
+; ++offset;
+;
+L001C:	inc     _offset
+;
+; set_data_pointer(Rooms[offset]);
+;
+	ldx     #$00
+	lda     _offset
+	asl     a
+	bcc     L0019
+	inx
+	clc
+L0019:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     _set_data_pointer
+;
+; for(y=0; ;y+=0x20){ 
 ;
 	lda     #$00
-	jsr     _pad_trigger
-	and     #$10
-	jeq     L0002
+L0017:	sta     _y
 ;
-; ppu_off();
+; x = 0;
 ;
-	jmp     _ppu_off
+	lda     #$00
+	sta     _x
+;
+; clear_vram_buffer(); // do each frame, and before putting anything in the buffer
+;
+	jsr     _clear_vram_buffer
+;
+; address = get_ppu_addr(1, x, y);
+;
+	jsr     decsp2
+	lda     #$01
+	tay
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     _y
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = (y & 0xf0);
+;
+	lda     _y
+	and     #$F0
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; flush_vram_update_nmi();
+;
+	jsr     _flush_vram_update_nmi
+;
+; if (y == 0xe0) break;
+;
+	lda     _y
+	cmp     #$E0
+	beq     L000D
+;
+; for(y=0; ;y+=0x20){ 
+;
+	lda     #$20
+	clc
+	adc     _y
+	jmp     L0017
+;
+; clear_vram_buffer();
+;
+L000D:	jsr     _clear_vram_buffer
+;
+; --offset;
+;
+	dec     _offset
+;
+; memcpy (c_map, Rooms[offset], 240);
+;
+	lda     #<(_c_map)
+	ldx     #>(_c_map)
+	jsr     pushax
+	ldx     #$00
+	lda     _offset
+	asl     a
+	bcc     L001A
+	inx
+	clc
+L001A:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     pushax
+	ldx     #$00
+	lda     #$F0
+	jsr     _memcpy
+;
+; sball.x = 0x4000;
+;
+	ldx     #$40
+	lda     #$00
+	sta     _sball
+	stx     _sball+1
+;
+; sball.y = 0xc400;
+;
+	ldx     #$C4
+	sta     _sball+2
+	stx     _sball+2+1
+;
+; sball.vel_x = 0;
+;
+	sta     _sball+4
+	sta     _sball+4+1
+;
+; sball.vel_y = 0;
+;
+	sta     _sball+6
+	sta     _sball+6+1
+;
+; map_loaded = 0;
+;
+	sta     _map_loaded
 ;
 ; }
 ;
-L0003:	rts
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ movement (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_movement: near
+
+.segment	"CODE"
+
+;
+; old_x = sball.x;
+;
+	lda     _sball
+	sta     _old_x
+;
+; if(pad1 & PAD_LEFT) {
+;
+	lda     _pad1
+	and     #$02
+	beq     L0014
+;
+; sball.vel_x -= ACCEL;
+;
+	lda     _sball+4
+	sec
+	sbc     #$30
+	sta     _sball+4
+	bcs     L0003
+	dec     _sball+4+1
+;
+; sball.x -=1;
+;
+L0003:	lda     _sball
+	sec
+	sbc     #$01
+	sta     _sball
+	bcs     L0004
+	dec     _sball+1
+;
+; i++;
+;
+L0004:	inc     _i
+;
+; scroll_x-=1;
+;
+	lda     _scroll_x
+	sec
+	sbc     #$01
+	sta     _scroll_x
+	bcs     L0014
+	dec     _scroll_x+1
+;
+; if (pad1 & PAD_RIGHT){
+;
+L0014:	lda     _pad1
+	and     #$01
+	beq     L0016
+;
+; sball.vel_x += ACCEL;
+;
+	lda     #$30
+	clc
+	adc     _sball+4
+	sta     _sball+4
+	bcc     L0007
+	inc     _sball+4+1
+;
+; sball.x +=1;
+;
+L0007:	inc     _sball
+	bne     L0008
+	inc     _sball+1
+;
+; i++;
+;
+L0008:	inc     _i
+;
+; scroll_x+=1;
+;
+	inc     _scroll_x
+	bne     L0009
+	inc     _scroll_x+1
+;
+; if (k != 3 & i%7 ==0){
+;
+L0009:	lda     _k
+	cmp     #$03
+	jsr     boolne
+	jsr     pusha0
+	lda     _i
+	jsr     pusha0
+	lda     #$07
+	jsr     tosumoda0
+	cpx     #$00
+	bne     L000B
+	cmp     #$00
+L000B:	jsr     booleq
+	jsr     tosanda0
+	cmp     #$00
+	beq     L0015
+;
+; k++;
+;
+	inc     _k
+;
+; else if(k==3){
+;
+	jmp     L0016
+L0015:	lda     _k
+	cmp     #$03
+	bne     L0016
+;
+; k=0;}
+;
+	lda     #$00
+	sta     _k
+;
+; if(pad1 & PAD_UP){
+;
+L0016:	lda     _pad1
+	and     #$08
+	beq     L0017
+;
+; sball.y -=1;
+;
+	lda     _sball+2
+	sec
+	sbc     #$01
+	sta     _sball+2
+	bcs     L0011
+	dec     _sball+2+1
+;
+; else if (pad1 & PAD_DOWN){
+;
+	rts
+L0017:	lda     _pad1
+	and     #$04
+	beq     L0011
+;
+; sball.y +=1;
+;
+	inc     _sball+2
+	bne     L0011
+	inc     _sball+2+1
+;
+; } 
+;
+L0011:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ draw_screen_R (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_draw_screen_R: near
+
+.segment	"CODE"
+
+;
+; pseudo_scroll_x = scroll_x;
+;
+	lda     _scroll_x+1
+	sta     _pseudo_scroll_x+1
+	lda     _scroll_x
+	sta     _pseudo_scroll_x
+;
+; temp1 = 1 ;
+;
+	lda     #$01
+	sta     _temp1
+;
+; set_data_pointer(Rooms[temp1]);
+;
+	ldx     #$00
+	lda     _temp1
+	asl     a
+	bcc     L0011
+	inx
+	clc
+L0011:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     _set_data_pointer
+;
+; nt = temp1 & 1;
+;
+	lda     _temp1
+	and     #$01
+	sta     _nt
+;
+; x = pseudo_scroll_x & 0xff;
+;
+	lda     _pseudo_scroll_x
+	sta     _x
+;
+; switch(scroll_count){
+;
+	lda     _scroll_count
+;
+; }
+;
+	beq     L0004
+	cmp     #$01
+	beq     L0006
+	cmp     #$02
+	jeq     L0009
+	jmp     L000C
+;
+; address = get_ppu_addr(nt, x, 0);
+;
+L0004:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	tya
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0x20);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$20
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x20 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$20
+;
+; break;
+;
+	jmp     L0016
+;
+; address = get_ppu_addr(nt, x, 0x40);
+;
+L0006:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$40
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x40 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$40
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0x60);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$60
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x60 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$60
+;
+; break;
+;
+	jmp     L0016
+;
+; address = get_ppu_addr(nt, x, 0x80);
+;
+L0009:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$80
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x80 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$80
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0xa0);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$A0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xa0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$A0
+;
+; break;
+;
+	jmp     L0016
+;
+; address = get_ppu_addr(nt, x, 0xc0);
+;
+L000C:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$C0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xc0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$C0
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0xe0);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$E0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xe0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$E0
+L0016:	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; ++scroll_count;
+;
+	inc     _scroll_count
+;
+; scroll_count &= 3; //mask off top bits, keep it 0-3
+;
+	lda     _scroll_count
+	and     #$03
+	sta     _scroll_count
+;
+; }
+;
+	rts
 
 .endproc
 
@@ -4270,38 +1666,107 @@ L0003:	rts
 .segment	"CODE"
 
 ;
-; music_play(0);
+; ppu_off(); 
+;
+	jsr     _ppu_off
+;
+; pal_bg(palette);
+;
+	lda     #<(_palette)
+	ldx     #>(_palette)
+	jsr     _pal_bg
+;
+; pal_spr(palette_sp);
+;
+	lda     #<(_palette_sp)
+	ldx     #>(_palette_sp)
+	jsr     _pal_spr
+;
+; bank_spr(1);
+;
+	lda     #$01
+	jsr     _bank_spr
+;
+; vram_adr(NAMETABLE_A);
+;
+	ldx     #$20
+	lda     #$00
+	jsr     _vram_adr
+;
+; vram_unrle(Room1);
+;
+	lda     #<(_Room1)
+	ldx     #>(_Room1)
+	jsr     _vram_unrle
+;
+; vram_adr(NAMETABLE_B);
+;
+	ldx     #$24
+	lda     #$00
+	jsr     _vram_adr
+;
+; vram_unrle(Room2);
+;
+	lda     #<(_Room2)
+	ldx     #>(_Room2)
+	jsr     _vram_unrle
+;
+; sball.x = 0x4000;
+;
+	ldx     #$40
+	lda     #$00
+	sta     _sball
+	stx     _sball+1
+;
+; sball.y = 0x7500;
+;
+	ldx     #$75
+	sta     _sball+2
+	stx     _sball+2+1
+;
+; ppu_on_all(); // turn on screen
+;
+	jsr     _ppu_on_all
+;
+; ppu_wait_nmi(); // wait till beginning of the frame
+;
+L0002:	jsr     _ppu_wait_nmi
+;
+; pad1 = pad_poll(0); // read the first controller
 ;
 	lda     #$00
-	jsr     _music_play
+	jsr     _pad_poll
+	sta     _pad1
 ;
-; show_title_screen();
+; clear_vram_buffer(); // do at the beginning of each frame
 ;
-L0002:	jsr     _show_title_screen
+	jsr     _clear_vram_buffer
 ;
-; game_loop();
+; movement();
 ;
-	jsr     _game_loop
+	jsr     _movement
 ;
-; if(mouse1.bounced == 30) {
+; set_scroll_x(scroll_x);
 ;
-	lda     _mouse1+11
-	cmp     #$1E
-	bne     L0008
+	lda     _scroll_x
+	ldx     _scroll_x+1
+	jsr     _set_scroll_x
 ;
-; show_lose_screen();
+; set_scroll_y(scroll_y);
 ;
-	jsr     _show_lose_screen
+	lda     _scroll_y
+	ldx     _scroll_y+1
+	jsr     _set_scroll_y
 ;
-; else {
+; draw_screen_R();
 ;
-	jmp     L0002
+	jsr     _draw_screen_R
 ;
-; show_win_screen();
+; draw_sprites();
 ;
-L0008:	jsr     _show_win_screen
+	jsr     _draw_sprites
 ;
-; while(1) {
+; while (1){
 ;
 	jmp     L0002
 
