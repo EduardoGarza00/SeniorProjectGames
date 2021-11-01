@@ -1,11 +1,11 @@
-; Startup code for cc65 and Shirus NES library
+; Startup code for cc65 and Shiru's NES library
 ; based on code by Groepaz/Hitmen <groepaz@gmx.net>, Ullrich von Bassewitz <uz@cc65.org>
 
 
 
 FT_BASE_ADR		= $0100		;page in RAM, should be $xx00
 FT_DPCM_OFF		= $f000		;$c000..$ffc0, 64-byte steps
-FT_SFX_STREAMS	= 4			;number of sound effects played at once, 1..4
+FT_SFX_STREAMS	= 1			;number of sound effects played at once, 1..4
 
 FT_THREAD       = 1		;undefine if you call sound effects in the same thread as sound update
 FT_PAL_SUPPORT	= 1		;undefine to exclude PAL support
@@ -257,16 +257,17 @@ detectNTSC:
 	.include "MUSIC/famitone2.s"
 	
 	
+	
 .segment "RODATA"
 
 music_data:
-	.include "MUSIC/mainsong.s"
+;	.include "music.s"
 
 
 
 	.if(FT_SFX_ENABLE)
 sounds_data:
-	.include "MUSIC/sound1.s"
+;	.include "sounds.s"
 	.endif
 
 	

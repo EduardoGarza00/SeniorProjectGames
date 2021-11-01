@@ -1,6 +1,6 @@
 @echo off
 
-set name="creep"
+set name="scroll_r"
 
 set path=%path%;..\bin\
 
