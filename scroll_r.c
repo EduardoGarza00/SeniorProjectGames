@@ -78,6 +78,7 @@ void draw_sprites(void){
 		temp_x = mound_x[index];
 		if(temp_x > 0xf0) continue;
 		if(temp_y < 0xf0) {
+			
 			if(spr_type[index]==MOUNDS){
 			oam_meta_spr(temp_x, temp_y, mound);
 			}
@@ -92,6 +93,7 @@ void draw_sprites(void){
 		temp2 = enemy_x[index];
 		if(temp2 > 0xf0) continue;
 		if(temp1 && (temp_y < 0xf0)) {
+			
 			oam_meta_spr(temp2, temp_y, skier);
 		}
 	}
@@ -173,9 +175,9 @@ void movement(void){
 			sball.vel_y = SPEED;
 		}
 	}
-	else { //nothing pressed
-		sball.vel_y = 0;
-	}
+	//else { //nothing pressed
+	//	sball.vel_y = 0;
+	//}
 	
 	sball.y += sball.vel_y;
 	
@@ -398,7 +400,7 @@ void new_cmap(void){
 }
 
 void sprite_obj_init(void){
-
+	
 	pointer = level_1_mounds;
 	for(index = 0,index2 = 0;index < MAX_MOUNDS; ++index){
 		
@@ -433,6 +435,7 @@ void sprite_obj_init(void){
 	}
 	
 	pointer = level_1_enemies;
+	
 	for(index = 0,index2 = 0;index < MAX_ENEMY; ++index){
 		
 		enemy_x[index] = 0;
@@ -524,14 +527,13 @@ void show_title_screen(void) {
 
 	while(1) {
 		if(pad_poll(0) == PAD_START) {
-			song = SONG_GAME;
-			music_play(song);
 			break;
 		}
 	}
 }
 
 void show_win_screen(void) {
+	music_play(0); 
 	ppu_off();
 	oam_clear();
 	clear_vram_buffer();
@@ -563,11 +565,7 @@ void show_lose_screen(void) {
 	vram_unrle(losescreen);
  
 	ppu_on_all();
-	while(1) {
-		if(pad_poll(0) == PAD_START) {
-			break;
-		}
-	}
+	
 }
 
 void sprite_collisions(void){
@@ -580,7 +578,7 @@ void sprite_collisions(void){
 	}
 	else{
 		Generic.width = HERO_WIDTH;
-		Generic.height = HERO_HEIGHT;
+	Generic.height = HERO_HEIGHT;
 	}
 	for(index = 0; index < MAX_MOUNDS; ++index){
 		if(mound_active[index]){
@@ -598,7 +596,7 @@ void sprite_collisions(void){
 				mound_y[index] = TURN_OFF;
 				++lives;
 				sfx_play(SFX_DING, 0);
-				
+				;
 				
 				if(spr_type[index] == END){ changemode++;}
 			}
@@ -616,16 +614,23 @@ void sprite_collisions(void){
 				enemy_y[index] = TURN_OFF;
 				enemy_active[index] = 0;
 				lives = lives -1;
-				sfx_play(SFX_NOISE, 0);
+				sfx_play(SFX_DING,0);
+				
 			}
 		}
 	}
 }
 
+
+
+
+
+
+
 void main (void) {
 	
 	show_title_screen();
-		
+		music_play(0);
 		ppu_off();
 		
 		lives = 3;
@@ -651,18 +656,19 @@ void main (void) {
 			ppu_wait_nmi(); // wait till beginning of the frame
 		
 			pad1 = pad_poll(0); // read the first controller
-			if(pad1 & PAD_START){
+		if(pad1 & PAD_START){
 				
-				ppu_off();
-				load_room();
-				mode = PLAY;
-				
-				
-				
-				// set scroll
-				set_scroll_x(scroll_x);
-				set_scroll_y(scroll_y);
-				ppu_on_all();
+		   ppu_off();
+			load_room();
+			mode = PLAY;
+			
+			
+				music_play(1);
+			
+			// set scroll
+			set_scroll_x(scroll_x);
+			set_scroll_y(scroll_y);
+			ppu_on_all();
 		
 				
 				
@@ -671,7 +677,9 @@ void main (void) {
 			
 		}
 		while(mode==PLAY){
+			
 			ppu_wait_nmi();
+			set_music_speed(8);
 			pad1 = pad_poll(0);
 			clear_vram_buffer();
 			movement();
@@ -709,9 +717,8 @@ void main (void) {
 		
 		while(mode == FINISH){
 			ppu_wait_nmi();
-			oam_clear();
-			clear_vram_buffer();
-			music_stop();
+			
+			
 			
 			if(lives>4){
 			show_win_screen();

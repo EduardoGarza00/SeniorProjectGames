@@ -1,6 +1,9 @@
 #define SPEED 0x180
 #define MAX_RIGHT 0xb000
-
+unsigned char song;
+#define MAX_SONGS 2
+enum {SONG_GAME, SONG_PAUSE};
+enum {SFX_JUMP, SFX_DING, SFX_NOISE};
 
 
 #pragma bss-name(push, "ZEROPAGE")
@@ -33,10 +36,6 @@ unsigned char eject_R; // remember these from the collision sub routine
 unsigned char eject_D; // from below
 unsigned char eject_U; // from up
 unsigned char direction; //facing left or right?
-unsigned char song;
-#define MAX_SONGS 2
-enum {SONG_GAME, SONG_PAUSE};
-enum {SFX_JUMP, SFX_DING, SFX_NOISE};
 #define LEFT 0
 #define RIGHT 1
 unsigned char mode;
@@ -108,7 +107,7 @@ struct enemySkier BoxGuy1 = {0x4000,0x6100}; // starting position
 
 #define HERO_WIDTH 5
 #define HERO_HEIGHT 5
-#define HERO_HEIGHT_SMALL 1
+#define HERO_HEIGHT_SMALL 2
 #define HERO_WIDTH_SMALL 2
 
 
@@ -124,7 +123,7 @@ const unsigned char palette_bg[]={
 }; 
 
 const unsigned char palette_sp[]={
-0x0f, 0x07, 0x28, 0x38, // dk brown, yellow, white yellow
+0x0f, 0x01, 0x21, 0x31, 
 0,0,0,0,
 0,0,0,0,
 0,0,0,0
@@ -139,6 +138,11 @@ const unsigned char enemypal[]={
 const unsigned char paletter[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x30,0x0f,0x07,0x16,0x26,0x0f,0x09,0x19,0x29 };
 const unsigned char winpal[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x16,0x26,0x0f,0x05,0x0c,0x28 };
 const unsigned char losepal[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x16,0x26,0x0f,0x05,0x0c,0x28 };
+
+
+
+
+
 // 5 bytes per metatile definition, tile TL, TR, BL, BR, palette 0-3
 // T means top, B means bottom, L left,R right
 // 51 maximum # of metatiles = 255 bytes
@@ -200,7 +204,8 @@ const unsigned char level_1_mounds[]={
 	0x61,3,0x75,MOUNDS,
 	0x81,4,0x85,MOUNDS,
 	0x61,5,0x125,MOUNDS,
-	0x70,5,0x70,END,
+	0x70,5,0x1000,END,
+	0x80,5,0x1000,END,
 	TURN_OFF
 };
 

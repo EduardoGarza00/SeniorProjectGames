@@ -1,22 +1,29 @@
 
 
 const unsigned char ball1[]={
-	-15,-12,0x10,0,
-	128
-};
-const unsigned char ball2[]={
-	- 15,-12,0x11,0,
+	  0,  0,0x10,0,
 	128
 };
 
+
+const unsigned char ball2[]={
+	  0,  0,0x10,0|OAM_FLIP_H,
+	128
+};
+
+
 const unsigned char ball3[]={
-	  -15,- 12,0x12,0,
+	  0,  0,0x10,0|OAM_FLIP_H,
 	128
 };
+
+
 const unsigned char ball4[]={
-	 -15, -12,0x13,0,
+	  0,  0,0x10,0|OAM_FLIP_V,
 	128
 };
+
+
 
 const unsigned char bigball1[]={
 	- 8,- 8,0x20,0,
@@ -55,11 +62,28 @@ const unsigned char mound[]={
 	128
 };
 
-const unsigned char endSprite[]={
-	  0,-16,0x1b,1,
-	  0,- 8,0x1b,1,
-	  0,  0,0x1b,1,
+const unsigned char end[]={
+	
+	- 8,-16,0x22,0,
+	  0,-16,0x24,0,
+	- 8,  0,0x22,0,
+	  0,- 8,0x22,0,
+	  0,  8,0x22,0,
+	- 8,- 8,0x24,0,
+	  0,  0,0x24,0,
+	- 8,  8,0x24,0,
+	- 8,-16,0x22,0,
+	  0,-16,0x24,0,
+	- 8,  0,0x22,0,
+	  0,- 8,0x22,0,
+	  0,  8,0x22,0,
+	- 8,- 8,0x24,0,
+	  0,  0,0x24,0,
+	- 8,  8,0x24,0,
 	128
+
+
+
 };
 
 
@@ -72,17 +96,5 @@ const unsigned char skier[]={
 };
  
 
-const unsigned char end[]={
-	- 8,-16,0x01,0,
-	  0,- 8,0x02,0,
-	- 8,  0,0x01,0,
-	- 8, 16,0x01,0,
-	  0,  8,0x02,0,
-	  0,-16,0x03,0,
-	  0,  0,0x03,0,
-	  0, 16,0x03,0,
-	- 8,- 8,0x03,0,
-	- 8,  8,0x03,0,
-	128
-};
+
 
