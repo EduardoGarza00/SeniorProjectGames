@@ -57,8 +57,18 @@ void draw_sprites(void){
 	
 	//if(temp_x > 0) temp_x = 5;
 	//if(temp_x == 0) temp_x = 5;
+	 if(lives<4){
+		 
+		 oam_meta_spr(temp_x,temp_y,brotate[k]);
+	 }
+	 else {
+		 oam_meta_spr(temp_x,temp_y,bigbrotate[k]);	
+	 }
 	
-	oam_meta_spr(temp_x,temp_y,bigbrotate[k]);	
+	
+	
+	
+	
 	
 	for(index = 0; index < MAX_MOUNDS; ++index){
 		temp_y = mound_y[index];
@@ -68,7 +78,10 @@ void draw_sprites(void){
 		temp_x = mound_x[index];
 		if(temp_x > 0xf0) continue;
 		if(temp_y < 0xf0) {
+			if(spr_type[index]==MOUNDS){
 			oam_meta_spr(temp_x, temp_y, mound);
+			}
+			else{oam_meta_spr(temp_x,temp_y,end);}
 		}
 	}
 	
@@ -110,11 +123,18 @@ void movement(void){
 	
 	Generic.x = high_byte(sball.x); //this is much faster than passing a pointer to sball
 	Generic.y = high_byte(sball.y);
-	Generic.width = HERO_WIDTH;
+	if(lives<4){
+	Generic.width = HERO_WIDTH_SMALL;
+	Generic.height = HERO_HEIGHT_SMALL;
+	}
+	else{
+		Generic.width = HERO_WIDTH;
 	Generic.height = HERO_HEIGHT;
+	}
 	bg_collision();
 	if(collision_R && collision_L){ //if both true, probably half stuck in a wall
 		sball.x = old_x;
+	 
 	}
 	else if(collision_L) {
 		high_byte(sball.x) = high_byte(sball.x) - eject_L;
@@ -122,7 +142,9 @@ void movement(void){
 	}
 	else if(collision_R) {
 		high_byte(sball.x) = high_byte(sball.x) - eject_R;
-	} 
+		
+	}
+	
 
 	// handle y
 	old_y = sball.y; //didn't end up using the old value
@@ -166,19 +188,27 @@ void movement(void){
 	Generic.x = high_byte(sball.x); // this is much faster than passing a pointer to sball
 	Generic.y = high_byte(sball.y);
 	
-	//Generic.width = HERO_WIDTH;
-	//Generic.height = HERO_HEIGHT;
-	
+	if(lives<4){
+	Generic.width = HERO_WIDTH_SMALL;
+	Generic.height = HERO_HEIGHT_SMALL;
+	}
+	else{
+		Generic.width = HERO_WIDTH;
+	Generic.height = HERO_HEIGHT;
+	}
 	bg_collision();
 	if(collision_U && collision_D){ // if both true, probably half stuck in a wall
 		sball.y = old_y;
+		
 	}
 	else if(collision_U) {
 		high_byte(sball.y) = high_byte(sball.y) - eject_U;
+	
 		
 	}
 	else if(collision_D) {
 		high_byte(sball.y) = high_byte(sball.y) - eject_D;
+	
 	}
 	
 	
@@ -197,10 +227,11 @@ void movement(void){
 
 	if(scroll_x >= MAX_SCROLL) {
 		scroll_x = MAX_SCROLL;	// stop scrolling right, end of level
-		game_end = 1;
+		
 		sball.x = temp5; // but allow the x position to go all the way right
 		if(high_byte(sball.x) >= 0xf1) {
 			sball.x = 0xf100;
+			game_end =1;
 		}
 	}
 }	
@@ -392,6 +423,9 @@ void sprite_obj_init(void){
 		mound_actual_x[index] = temp1;
 		
 		++index2;
+		temp1 = pointer[index2];
+		spr_type[index]=temp1;
+		++index2;
 	}
 	
 	for(++index;index < MAX_MOUNDS; ++index){
@@ -479,7 +513,7 @@ void skier_move(void){
 }
 
 void show_title_screen(void) {
-	ppu_off();
+	//ppu_off();
 	pal_all(palettetitle);
 	
 
@@ -490,6 +524,8 @@ void show_title_screen(void) {
 
 	while(1) {
 		if(pad_poll(0) == PAD_START) {
+			song = SONG_GAME;
+			music_play(song);
 			break;
 		}
 	}
@@ -497,6 +533,9 @@ void show_title_screen(void) {
 
 void show_win_screen(void) {
 	ppu_off();
+	oam_clear();
+	clear_vram_buffer();
+	set_scroll_x(0);
 	pal_all(winpal);
 	
 
@@ -514,6 +553,9 @@ void show_win_screen(void) {
 
 void show_lose_screen(void) {
 	ppu_off();
+	oam_clear();
+	clear_vram_buffer();
+	set_scroll_x(0);
 	pal_all(losepal);
 	
 
@@ -521,17 +563,68 @@ void show_lose_screen(void) {
 	vram_unrle(losescreen);
  
 	ppu_on_all();
-	delay(10);
-	
-	pal_fade_to(0,4);
+	while(1) {
+		if(pad_poll(0) == PAD_START) {
+			break;
+		}
+	}
 }
 
+void sprite_collisions(void){
+
+	Generic.x = high_byte(sball.x);
+	Generic.y = high_byte(sball.y);
+	if(lives<4){
+	Generic.width = HERO_WIDTH_SMALL;
+	Generic.height = HERO_HEIGHT_SMALL;
+	}
+	else{
+		Generic.width = HERO_WIDTH;
+		Generic.height = HERO_HEIGHT;
+	}
+	for(index = 0; index < MAX_MOUNDS; ++index){
+		if(mound_active[index]){
+			if(spr_type[index] == MOUNDS){
+				Generic2.width = mound_WIDTH;
+				Generic2.height = mound_HEIGHT;
+			}
+			else{
+				Generic2.width = END_WIDTH;
+				Generic2.height = END_HEIGHT;
+			}
+			Generic2.x = mound_x[index];
+			Generic2.y = mound_y[index];
+			if(check_collision(&Generic, &Generic2)){
+				mound_y[index] = TURN_OFF;
+				++lives;
+				sfx_play(SFX_DING, 0);
+				
+				
+				if(spr_type[index] == END){ changemode++;}
+			}
+		}
+	}
+
+	Generic2.width = ENEMY_WIDTH;
+	Generic2.height = ENEMY_HEIGHT;
+	
+	for(index = 0; index < MAX_ENEMY; ++index){
+		if(enemy_active[index]){
+			Generic2.x = enemy_x[index];
+			Generic2.y = enemy_y[index];
+			if(check_collision(&Generic, &Generic2)){
+				enemy_y[index] = TURN_OFF;
+				enemy_active[index] = 0;
+				lives = lives -1;
+				sfx_play(SFX_NOISE, 0);
+			}
+		}
+	}
+}
 
 void main (void) {
 	
-	
-	while(1){
-		show_title_screen();
+	show_title_screen();
 		
 		ppu_off();
 		
@@ -545,43 +638,88 @@ void main (void) {
 		set_vram_buffer(); // do at least once, sets a pointer to a buffer
 		clear_vram_buffer();
 	
-		load_room();
 		
 		scroll_y = 0xff;
 		set_scroll_y(scroll_y); // shift the bg down 1 pixel
 	
 		ppu_on_all();
 		
-		while(lives > 0 && game_end == 0)
+	while(1){
+		
+		while(mode == TITLE)
 		{
 			ppu_wait_nmi(); // wait till beginning of the frame
 		
 			pad1 = pad_poll(0); // read the first controller
+			if(pad1 & PAD_START){
+				
+				ppu_off();
+				load_room();
+				mode = PLAY;
+				
+				
+				
+				// set scroll
+				set_scroll_x(scroll_x);
+				set_scroll_y(scroll_y);
+				ppu_on_all();
+		
+				
+				
+			}
 			
-			clear_vram_buffer(); // do at the beginning of each frame
 			
+		}
+		while(mode==PLAY){
+			ppu_wait_nmi();
+			pad1 = pad_poll(0);
+			clear_vram_buffer();
 			movement();
 			check_spr_objects();
+			sprite_collisions();
 			skier_move();
-			
-			// set scroll
 			set_scroll_x(scroll_x);
 			set_scroll_y(scroll_y);
 			draw_screen_R();
 			draw_sprites();
+			if(lives == 0){
+			mode = SWITCH;
+			}
+			if(changemode){
+				mode = SWITCH;
+				changemode =0;
+				
+			}
 			
 		}
 		
-		if (lives > 0) {
-			show_win_screen();
-			game_end = 1;
-		}
-	
-		if (lives == 0) {
-			show_lose_screen();
-			game_end = 1;
+		
+		while(mode ==SWITCH){
+			ppu_wait_nmi();
+			set_scroll_x(scroll_x);
+			
+			mode = FINISH;
+			vram_adr(NAMETABLE_A);
+			vram_fill(0,1024);
+			ppu_on_all();
+			
+			
+			
 		}
 		
-		break;
+		while(mode == FINISH){
+			ppu_wait_nmi();
+			oam_clear();
+			clear_vram_buffer();
+			music_stop();
+			
+			if(lives>4){
+			show_win_screen();
+			}
+			else{show_lose_screen();}
+		}
+		
+		
+		//break;
 	}
 }

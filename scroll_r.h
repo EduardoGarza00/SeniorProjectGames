@@ -19,6 +19,7 @@ unsigned char collision_R;
 unsigned char collision_U;
 unsigned char collision_D;
 unsigned char coordinates;
+unsigned char changemode;
 unsigned char temp1;
 unsigned char temp2;
 unsigned char temp3;
@@ -32,9 +33,14 @@ unsigned char eject_R; // remember these from the collision sub routine
 unsigned char eject_D; // from below
 unsigned char eject_U; // from up
 unsigned char direction; //facing left or right?
+unsigned char song;
+#define MAX_SONGS 2
+enum {SONG_GAME, SONG_PAUSE};
+enum {SFX_JUMP, SFX_DING, SFX_NOISE};
 #define LEFT 0
 #define RIGHT 1
-
+unsigned char mode;
+enum {TITLE,PLAY, FINISH, SWITCH};
 int address;
 unsigned char x; // room loader code
 unsigned char y,k,i;
@@ -102,7 +108,8 @@ struct enemySkier BoxGuy1 = {0x4000,0x6100}; // starting position
 
 #define HERO_WIDTH 5
 #define HERO_HEIGHT 5
-
+#define HERO_HEIGHT_SMALL 1
+#define HERO_WIDTH_SMALL 2
 
 
 
@@ -175,21 +182,25 @@ unsigned char mound_y[MAX_MOUNDS];
 unsigned char mound_active[MAX_MOUNDS];
 unsigned char mound_room[MAX_MOUNDS];
 unsigned char mound_actual_x[MAX_MOUNDS];
+unsigned char spr_type[MAX_MOUNDS];
 
 #define TURN_OFF 0xff
 #define mound_WIDTH 7
 #define mound_HEIGHT 11
+#define END_HEIGHT 100
+#define END_WIDTH 100
 
 
 
-
+enum{MOUNDS, END};
 const unsigned char level_1_mounds[]={
-	0x61,0,0x65,
-	0x81,1,0x85,
-	0x61,2,0x95,
-	0x61,3,0x75,
-	0x81,4,0x85,
-	0x61,5,0x125,
+	0x61,0,0x65,MOUNDS,
+	0x81,1,0x85,MOUNDS,
+	0x61,2,0x95,MOUNDS,
+	0x61,3,0x75,MOUNDS,
+	0x81,4,0x85,MOUNDS,
+	0x61,5,0x125,MOUNDS,
+	0x70,5,0x70,END,
 	TURN_OFF
 };
 

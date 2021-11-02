@@ -1,22 +1,3 @@
-// a 16x16 pixel metasprite
-
-const unsigned char RoundSprL[]={
-	  0xff,  0xff,0x02,0,
-	  7,  0xff,0x03,0,
-	  0xff,  7,0x12,0,
-	  7,  7,0x13,0,
-	128
-};
-
-
-const unsigned char RoundSprR[]={
-	  0xff,  0xff,0x00,0,
-	  7,  0xff,0x01,0,
-	  0xff,  7,0x10,0,
-	  7,  7,0x11,0,
-	128
-};
-
 
 
 const unsigned char ball1[]={
@@ -90,4 +71,18 @@ const unsigned char skier[]={
 	128
 };
  
+
+const unsigned char end[]={
+	- 8,-16,0x01,0,
+	  0,- 8,0x02,0,
+	- 8,  0,0x01,0,
+	- 8, 16,0x01,0,
+	  0,  8,0x02,0,
+	  0,-16,0x03,0,
+	  0,  0,0x03,0,
+	  0, 16,0x03,0,
+	- 8,- 8,0x03,0,
+	- 8,  8,0x03,0,
+	128
+};
 

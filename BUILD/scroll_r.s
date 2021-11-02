@@ -19,16 +19,19 @@
 	.import		_ppu_on_all
 	.import		_oam_clear
 	.import		_oam_meta_spr
+	.import		_music_play
+	.import		_music_stop
+	.import		_sfx_play
 	.import		_pad_poll
 	.import		_bank_spr
 	.import		_vram_adr
+	.import		_vram_fill
 	.import		_vram_unrle
 	.import		_memcpy
-	.import		_delay
 	.import		_set_vram_buffer
 	.import		_clear_vram_buffer
 	.import		_get_frame_count
-	.import		_pal_fade_to
+	.import		_check_collision
 	.import		_set_scroll_x
 	.import		_set_scroll_y
 	.import		_get_ppu_addr
@@ -36,8 +39,6 @@
 	.import		_set_mt_pointer
 	.import		_buffer_4_mt
 	.import		_flush_vram_update_nmi
-	.export		_RoundSprL
-	.export		_RoundSprR
 	.export		_ball1
 	.export		_ball2
 	.export		_ball3
@@ -49,6 +50,7 @@
 	.export		_mound
 	.export		_endSprite
 	.export		_skier
+	.export		_end
 	.export		_mounds
 	.export		_pointer
 	.export		_game
@@ -63,6 +65,7 @@
 	.export		_collision_U
 	.export		_collision_D
 	.export		_coordinates
+	.export		_changemode
 	.export		_temp1
 	.export		_temp2
 	.export		_temp3
@@ -76,6 +79,8 @@
 	.export		_eject_D
 	.export		_eject_U
 	.export		_direction
+	.export		_song
+	.export		_mode
 	.export		_address
 	.export		_x
 	.export		_y
@@ -125,6 +130,7 @@
 	.export		_mound_active
 	.export		_mound_room
 	.export		_mound_actual_x
+	.export		_spr_type
 	.export		_level_1_mounds
 	.export		_enemy_x
 	.export		_enemy_y
@@ -147,6 +153,7 @@
 	.export		_get_position
 	.export		_sprite_obj_init
 	.export		_skier_move
+	.export		_sprite_collisions
 	.export		_main
 
 .segment	"DATA"
@@ -166,42 +173,6 @@ _BoxGuy1:
 
 .segment	"RODATA"
 
-_RoundSprL:
-	.byte	$FF
-	.byte	$FF
-	.byte	$02
-	.byte	$00
-	.byte	$07
-	.byte	$FF
-	.byte	$03
-	.byte	$00
-	.byte	$FF
-	.byte	$07
-	.byte	$12
-	.byte	$00
-	.byte	$07
-	.byte	$07
-	.byte	$13
-	.byte	$00
-	.byte	$80
-_RoundSprR:
-	.byte	$FF
-	.byte	$FF
-	.byte	$00
-	.byte	$00
-	.byte	$07
-	.byte	$FF
-	.byte	$01
-	.byte	$00
-	.byte	$FF
-	.byte	$07
-	.byte	$10
-	.byte	$00
-	.byte	$07
-	.byte	$07
-	.byte	$11
-	.byte	$00
-	.byte	$80
 _ball1:
 	.byte	$F1
 	.byte	$F4
@@ -334,6 +305,48 @@ _skier:
 	.byte	$00
 	.byte	$00
 	.byte	$19
+	.byte	$00
+	.byte	$80
+_end:
+	.byte	$F8
+	.byte	$F0
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$F8
+	.byte	$02
+	.byte	$00
+	.byte	$F8
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$F8
+	.byte	$10
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$02
+	.byte	$00
+	.byte	$00
+	.byte	$F0
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$03
+	.byte	$00
+	.byte	$00
+	.byte	$10
+	.byte	$03
+	.byte	$00
+	.byte	$F8
+	.byte	$F8
+	.byte	$03
+	.byte	$00
+	.byte	$F8
+	.byte	$08
+	.byte	$03
 	.byte	$00
 	.byte	$80
 _brotate:
@@ -3070,21 +3083,31 @@ _level_1_mounds:
 	.byte	$61
 	.byte	$00
 	.byte	$65
+	.byte	$00
 	.byte	$81
 	.byte	$01
 	.byte	$85
+	.byte	$00
 	.byte	$61
 	.byte	$02
 	.byte	$95
+	.byte	$00
 	.byte	$61
 	.byte	$03
 	.byte	$75
+	.byte	$00
 	.byte	$81
 	.byte	$04
 	.byte	$85
+	.byte	$00
 	.byte	$61
 	.byte	$05
 	.byte	$25
+	.byte	$00
+	.byte	$70
+	.byte	$05
+	.byte	$70
+	.byte	$01
 	.byte	$FF
 _level_1_enemies:
 	.byte	$C2
@@ -3125,6 +3148,8 @@ _collision_D:
 	.res	1,$00
 _coordinates:
 	.res	1,$00
+_changemode:
+	.res	1,$00
 _temp1:
 	.res	1,$00
 _temp2:
@@ -3150,6 +3175,10 @@ _eject_D:
 _eject_U:
 	.res	1,$00
 _direction:
+	.res	1,$00
+_song:
+	.res	1,$00
+_mode:
 	.res	1,$00
 _address:
 	.res	2,$00
@@ -3203,6 +3232,8 @@ _mound_active:
 _mound_room:
 	.res	16,$00
 _mound_actual_x:
+	.res	16,$00
+_spr_type:
 	.res	16,$00
 _enemy_x:
 	.res	17,$00
@@ -3435,7 +3466,13 @@ L0011:	lda     _room1,y
 	lda     _sball+3
 	sta     _temp_y
 ;
-; oam_meta_spr(temp_x,temp_y,bigbrotate[k]); 
+; if(lives<4){
+;
+	lda     _lives
+	cmp     #$04
+	bcs     L0002
+;
+; oam_meta_spr(temp_x,temp_y,brotate[k]);
 ;
 	jsr     decsp2
 	lda     _temp_x
@@ -3447,14 +3484,38 @@ L0011:	lda     _room1,y
 	ldx     #$00
 	lda     _k
 	asl     a
-	bcc     L001C
+	bcc     L0024
 	inx
 	clc
-L001C:	adc     #<(_bigbrotate)
+L0024:	adc     #<(_brotate)
+	sta     ptr1
+	txa
+	adc     #>(_brotate)
+;
+; else {
+;
+	jmp     L0033
+;
+; oam_meta_spr(temp_x,temp_y,bigbrotate[k]); 
+;
+L0002:	jsr     decsp2
+	lda     _temp_x
+	ldy     #$01
+	sta     (sp),y
+	lda     _temp_y
+	dey
+	sta     (sp),y
+	ldx     #$00
+	lda     _k
+	asl     a
+	bcc     L0025
+	inx
+	clc
+L0025:	adc     #<(_bigbrotate)
 	sta     ptr1
 	txa
 	adc     #>(_bigbrotate)
-	sta     ptr1+1
+L0033:	sta     ptr1+1
 	iny
 	lda     (ptr1),y
 	tax
@@ -3466,9 +3527,9 @@ L001C:	adc     #<(_bigbrotate)
 ;
 	lda     #$00
 	sta     _index
-L001D:	lda     _index
+L0026:	lda     _index
 	cmp     #$10
-	bcs     L001F
+	bcs     L0028
 ;
 ; temp_y = mound_y[index];
 ;
@@ -3479,20 +3540,20 @@ L001D:	lda     _index
 ; if(temp_y == TURN_OFF) continue;
 ;
 	cmp     #$FF
-	beq     L001E
+	beq     L0027
 ;
 ; if(get_frame_count() & 8) ++temp_y; 
 ;
 	jsr     _get_frame_count
 	and     #$08
-	beq     L0008
+	beq     L000A
 	inc     _temp_y
 ;
 ; if(!mound_active[index]) continue;
 ;
-L0008:	ldy     _index
+L000A:	ldy     _index
 	lda     _mound_active,y
-	beq     L001E
+	beq     L0027
 ;
 ; temp_x = mound_x[index];
 ;
@@ -3503,13 +3564,19 @@ L0008:	ldy     _index
 ; if(temp_x > 0xf0) continue;
 ;
 	cmp     #$F1
-	bcs     L001E
+	bcs     L0027
 ;
 ; if(temp_y < 0xf0) {
 ;
 	lda     _temp_y
 	cmp     #$F0
-	bcs     L001E
+	bcs     L0027
+;
+; if(spr_type[index]==MOUNDS){
+;
+	ldy     _index
+	lda     _spr_type,y
+	bne     L0010
 ;
 ; oam_meta_spr(temp_x, temp_y, mound);
 ;
@@ -3522,20 +3589,33 @@ L0008:	ldy     _index
 	sta     (sp),y
 	lda     #<(_mound)
 	ldx     #>(_mound)
-	jsr     _oam_meta_spr
+;
+; else{oam_meta_spr(temp_x,temp_y,end);}
+;
+	jmp     L0023
+L0010:	jsr     decsp2
+	lda     _temp_x
+	ldy     #$01
+	sta     (sp),y
+	lda     _temp_y
+	dey
+	sta     (sp),y
+	lda     #<(_end)
+	ldx     #>(_end)
+L0023:	jsr     _oam_meta_spr
 ;
 ; for(index = 0; index < MAX_MOUNDS; ++index){
 ;
-L001E:	inc     _index
-	jmp     L001D
+L0027:	inc     _index
+	jmp     L0026
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
 ;
-L001F:	lda     #$00
+L0028:	lda     #$00
 	sta     _index
-L0020:	lda     _index
+L0029:	lda     _index
 	cmp     #$11
-	bcs     L000F
+	bcs     L0014
 ;
 ; temp_y = enemy_y[index];
 ;
@@ -3546,7 +3626,7 @@ L0020:	lda     _index
 ; if(temp_y == TURN_OFF) continue;
 ;
 	cmp     #$FF
-	beq     L0024
+	beq     L002D
 ;
 ; temp1 = enemy_active[index];
 ;
@@ -3563,15 +3643,15 @@ L0020:	lda     _index
 ; if(temp2 > 0xf0) continue;
 ;
 	cmp     #$F1
-	bcs     L0024
+	bcs     L002D
 ;
 ; if(temp1 && (temp_y < 0xf0)) {
 ;
 	lda     _temp1
-	beq     L0024
+	beq     L002D
 	lda     _temp_y
 	cmp     #$F0
-	bcs     L0024
+	bcs     L002D
 ;
 ; oam_meta_spr(temp2, temp_y, skier);
 ;
@@ -3588,12 +3668,12 @@ L0020:	lda     _index
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
 ;
-L0024:	inc     _index
-	jmp     L0020
+L002D:	inc     _index
+	jmp     L0029
 ;
 ; }
 ;
-L000F:	rts
+L0014:	rts
 
 .endproc
 
@@ -3648,7 +3728,7 @@ L000F:	rts
 L0004:	jsr     booleq
 	jsr     tosanda0
 	cmp     #$00
-	beq     L0032
+	beq     L0038
 ;
 ; k++;
 ;
@@ -3657,7 +3737,7 @@ L0004:	jsr     booleq
 ; else if(k==3){
 ;
 	jmp     L0006
-L0032:	lda     _k
+L0038:	lda     _k
 	cmp     #$03
 	bne     L0006
 ;
@@ -3684,23 +3764,23 @@ L0006:	lda     _sball+4
 ;
 	ldx     _sball+1
 	cpx     #$01
-	bcc     L0033
+	bcc     L0039
 	lda     _sball
 	cmp     #$01
 	lda     _sball+1
 	sbc     #$F8
-	bcc     L0034
+	bcc     L003A
 ;
 ; sball.x = 0x100;
 ;
-L0033:	ldx     #$01
+L0039:	ldx     #$01
 	lda     #$00
 	sta     _sball
 	stx     _sball+1
 ;
 ; L_R_switch = 1; // shinks the y values in bg_coll, less problems with head / feet collisions
 ;
-L0034:	lda     #$01
+L003A:	lda     #$01
 	sta     _L_R_switch
 ;
 ; Generic.x = high_byte(sball.x); //this is much faster than passing a pointer to sball
@@ -3713,14 +3793,33 @@ L0034:	lda     #$01
 	lda     _sball+3
 	sta     _Generic+1
 ;
+; if(lives<4){
+;
+	lda     _lives
+	cmp     #$04
+	bcs     L003B
+;
+; Generic.width = HERO_WIDTH_SMALL;
+;
+	lda     #$02
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT_SMALL;
+;
+	lda     #$01
+;
+; else{
+;
+	jmp     L0033
+;
 ; Generic.width = HERO_WIDTH;
 ;
-	lda     #$05
+L003B:	lda     #$05
 	sta     _Generic+2
 ;
 ; Generic.height = HERO_HEIGHT;
 ;
-	sta     _Generic+3
+L0033:	sta     _Generic+3
 ;
 ; bg_collision();
 ;
@@ -3729,9 +3828,9 @@ L0034:	lda     #$01
 ; if(collision_R && collision_L){ //if both true, probably half stuck in a wall
 ;
 	lda     _collision_R
-	beq     L000A
+	beq     L000C
 	lda     _collision_L
-	beq     L000A
+	beq     L000C
 ;
 ; sball.x = old_x;
 ;
@@ -3742,9 +3841,9 @@ L0034:	lda     #$01
 ;
 ; else if(collision_L) {
 ;
-	jmp     L0011
-L000A:	lda     _collision_L
-	beq     L000F
+	jmp     L0013
+L000C:	lda     _collision_L
+	beq     L0011
 ;
 ; high_byte(sball.x) = high_byte(sball.x) - eject_L;
 ;
@@ -3754,20 +3853,20 @@ L000A:	lda     _collision_L
 ;
 ; else if(collision_R) {
 ;
-	jmp     L003D
-L000F:	lda     _collision_R
-	beq     L0011
+	jmp     L0045
+L0011:	lda     _collision_R
+	beq     L0013
 ;
 ; high_byte(sball.x) = high_byte(sball.x) - eject_R;
 ;
 	lda     _sball+1
 	sec
 	sbc     _eject_R
-L003D:	sta     _sball+1
+L0045:	sta     _sball+1
 ;
 ; old_y = sball.y; //didn't end up using the old value
 ;
-L0011:	lda     _sball+2+1
+L0013:	lda     _sball+2+1
 	sta     _old_y+1
 	lda     _sball+2
 	sta     _old_y
@@ -3776,16 +3875,16 @@ L0011:	lda     _sball+2+1
 ;
 	lda     _pad1
 	and     #$08
-	beq     L0035
+	beq     L003C
 ;
 ; if(sball.y <= 0x100) {
 ;
 	lda     _sball+2+1
 	cmp     #$01
-	bne     L0014
+	bne     L0016
 	lda     _sball+2
 	cmp     #$01
-L0014:	bcs     L0013
+L0016:	bcs     L0015
 ;
 ; sball.vel_y = 0;
 ;
@@ -3801,10 +3900,10 @@ L0014:	bcs     L0013
 ;
 ; else if(sball.y < 0x400) { //don't want to wrap around to the other side
 ;
-	jmp     L001E
-L0013:	ldx     _sball+2+1
+	jmp     L0020
+L0015:	ldx     _sball+2+1
 	cpx     #$04
-	bcs     L0016
+	bcs     L0018
 ;
 ; sball.vel_y = -0x100;
 ;
@@ -3813,19 +3912,19 @@ L0013:	ldx     _sball+2+1
 ;
 ; else {
 ;
-	jmp     L0037
+	jmp     L003E
 ;
 ; sball.vel_y = -SPEED;
 ;
-L0016:	ldx     #$FE
+L0018:	ldx     #$FE
 ;
 ; else if (pad1 & PAD_DOWN){
 ;
-	jmp     L003E
-L0035:	lda     _pad1
+	jmp     L0046
+L003C:	lda     _pad1
 	ldx     #$00
 	and     #$04
-	beq     L0037
+	beq     L003E
 ;
 ; if(sball.y >= 0xe000) {
 ;
@@ -3833,7 +3932,7 @@ L0035:	lda     _pad1
 	cmp     #$00
 	lda     _sball+2+1
 	sbc     #$E0
-	bcc     L001A
+	bcc     L001C
 ;
 ; sball.vel_y = 0;
 ;
@@ -3849,12 +3948,12 @@ L0035:	lda     _pad1
 ;
 ; else if(sball.y > 0xdc00) { //don't want to wrap around to the other side
 ;
-	jmp     L001E
-L001A:	lda     _sball+2
+	jmp     L0020
+L001C:	lda     _sball+2
 	cmp     #$01
 	lda     _sball+2+1
 	sbc     #$DC
-	bcc     L001C
+	bcc     L001E
 ;
 ; sball.vel_y = 0x100;
 ;
@@ -3863,21 +3962,21 @@ L001A:	lda     _sball+2
 ;
 ; else {
 ;
-	jmp     L0037
+	jmp     L003E
 ;
 ; sball.vel_y = SPEED;
 ;
-L001C:	inx
-L003E:	lda     #$80
+L001E:	inx
+L0046:	lda     #$80
 ;
 ; sball.vel_y = 0;
 ;
-L0037:	sta     _sball+6
+L003E:	sta     _sball+6
 	stx     _sball+6+1
 ;
 ; sball.y += sball.vel_y;
 ;
-L001E:	lda     _sball+6
+L0020:	lda     _sball+6
 	clc
 	adc     _sball+2
 	sta     _sball+2
@@ -3889,25 +3988,25 @@ L001E:	lda     _sball+6
 ;
 	ldx     _sball+2+1
 	cpx     #$01
-	bcc     L0038
+	bcc     L003F
 	lda     _sball+2
 	cmp     #$01
 	lda     _sball+2+1
 	sbc     #$F0
-	bcs     L0038
+	bcs     L003F
 	lda     #$00
-	jmp     L003A
+	jmp     L0041
 ;
 ; sball.y = 0x100;
 ;
-L0038:	ldx     #$01
+L003F:	ldx     #$01
 	lda     #$00
 	sta     _sball+2
 	stx     _sball+2+1
 ;
 ; L_R_switch = 0; // shinks the y values in bg_coll, less problems with head / feet collisions
 ;
-L003A:	sta     _L_R_switch
+L0041:	sta     _L_R_switch
 ;
 ; Generic.x = high_byte(sball.x); // this is much faster than passing a pointer to sball
 ;
@@ -3919,6 +4018,34 @@ L003A:	sta     _L_R_switch
 	lda     _sball+3
 	sta     _Generic+1
 ;
+; if(lives<4){
+;
+	lda     _lives
+	cmp     #$04
+	bcs     L0042
+;
+; Generic.width = HERO_WIDTH_SMALL;
+;
+	lda     #$02
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT_SMALL;
+;
+	lda     #$01
+;
+; else{
+;
+	jmp     L0036
+;
+; Generic.width = HERO_WIDTH;
+;
+L0042:	lda     #$05
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT;
+;
+L0036:	sta     _Generic+3
+;
 ; bg_collision();
 ;
 	jsr     _bg_collision
@@ -3926,9 +4053,9 @@ L003A:	sta     _L_R_switch
 ; if(collision_U && collision_D){ // if both true, probably half stuck in a wall
 ;
 	lda     _collision_U
-	beq     L0022
+	beq     L0026
 	lda     _collision_D
-	beq     L0022
+	beq     L0026
 ;
 ; sball.y = old_y;
 ;
@@ -3939,9 +4066,9 @@ L003A:	sta     _L_R_switch
 ;
 ; else if(collision_U) {
 ;
-	jmp     L0029
-L0022:	lda     _collision_U
-	beq     L0027
+	jmp     L002D
+L0026:	lda     _collision_U
+	beq     L002B
 ;
 ; high_byte(sball.y) = high_byte(sball.y) - eject_U;
 ;
@@ -3951,22 +4078,22 @@ L0022:	lda     _collision_U
 ;
 ; else if(collision_D) {
 ;
-	jmp     L003F
-L0027:	lda     _collision_D
-	beq     L0029
+	jmp     L0047
+L002B:	lda     _collision_D
+	beq     L002D
 ;
 ; high_byte(sball.y) = high_byte(sball.y) - eject_D;
 ;
 	lda     _sball+3
 	sec
 	sbc     _eject_D
-L003F:	sta     _sball+3
+L0047:	sta     _sball+3
 ;
 ; if((scroll_x & 0xff) < 4){
 ;
-L0029:	lda     _scroll_x
+L002D:	lda     _scroll_x
 	cmp     #$04
-	bcs     L002A
+	bcs     L002E
 ;
 ; new_cmap(); //
 ;
@@ -3974,7 +4101,7 @@ L0029:	lda     _scroll_x
 ;
 ; temp5 = sball.x;
 ;
-L002A:	lda     _sball+1
+L002E:	lda     _sball+1
 	sta     _temp5+1
 	lda     _sball
 	sta     _temp5
@@ -3985,7 +4112,7 @@ L002A:	lda     _sball+1
 	cmp     #$01
 	lda     _sball+1
 	sbc     #$B0
-	bcc     L002C
+	bcc     L0030
 ;
 ; temp1 = (sball.x - MAX_RIGHT) >> 8;
 ;
@@ -4012,11 +4139,11 @@ L002A:	lda     _sball+1
 ;
 ; if(scroll_x >= MAX_SCROLL) {
 ;
-L002C:	lda     _scroll_x
+L0030:	lda     _scroll_x
 	cmp     #$FF
 	lda     _scroll_x+1
 	sbc     #$04
-	bcc     L002E
+	bcc     L0032
 ;
 ; scroll_x = MAX_SCROLL; // stop scrolling right, end of level
 ;
@@ -4024,11 +4151,6 @@ L002C:	lda     _scroll_x
 	lda     #$FF
 	sta     _scroll_x
 	stx     _scroll_x+1
-;
-; game_end = 1;
-;
-	lda     #$01
-	sta     _game_end
 ;
 ; sball.x = temp5; // but allow the x position to go all the way right
 ;
@@ -4041,7 +4163,7 @@ L002C:	lda     _scroll_x
 ;
 	lda     _sball+1
 	cmp     #$F1
-	bcc     L002E
+	bcc     L0032
 ;
 ; sball.x = 0xf100;
 ;
@@ -4050,9 +4172,14 @@ L002C:	lda     _scroll_x
 	sta     _sball
 	stx     _sball+1
 ;
+; game_end =1;
+;
+	lda     #$01
+	sta     _game_end
+;
 ; } 
 ;
-L002E:	rts
+L0032:	rts
 
 .endproc
 
@@ -4754,10 +4881,6 @@ L0007:	sta     _collision
 .segment	"CODE"
 
 ;
-; ppu_off();
-;
-	jsr     _ppu_off
-;
 ; pal_all(palettetitle);
 ;
 	lda     #<(_palettetitle)
@@ -4787,9 +4910,14 @@ L0002:	lda     #$00
 	cmp     #$10
 	bne     L0002
 ;
-; break;
+; song = SONG_GAME;
 ;
-	rts
+	lda     #$00
+	sta     _song
+;
+; music_play(song);
+;
+	jmp     _music_play
 
 .endproc
 
@@ -4807,6 +4935,20 @@ L0002:	lda     #$00
 ; ppu_off();
 ;
 	jsr     _ppu_off
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; clear_vram_buffer();
+;
+	jsr     _clear_vram_buffer
+;
+; set_scroll_x(0);
+;
+	ldx     #$00
+	txa
+	jsr     _set_scroll_x
 ;
 ; pal_all(winpal);
 ;
@@ -4858,6 +5000,20 @@ L0002:	lda     #$00
 ;
 	jsr     _ppu_off
 ;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; clear_vram_buffer();
+;
+	jsr     _clear_vram_buffer
+;
+; set_scroll_x(0);
+;
+	ldx     #$00
+	txa
+	jsr     _set_scroll_x
+;
 ; pal_all(losepal);
 ;
 	lda     #<(_losepal)
@@ -4880,17 +5036,16 @@ L0002:	lda     #$00
 ;
 	jsr     _ppu_on_all
 ;
-; delay(10);
+; if(pad_poll(0) == PAD_START) {
 ;
-	lda     #$0A
-	jsr     _delay
+L0002:	lda     #$00
+	jsr     _pad_poll
+	cmp     #$10
+	bne     L0002
 ;
-; pal_fade_to(0,4);
+; break;
 ;
-	lda     #$00
-	jsr     pusha
-	lda     #$04
-	jmp     _pal_fade_to
+	rts
 
 .endproc
 
@@ -5097,9 +5252,9 @@ L0003:	lda     #$01
 	lda     #$00
 	sta     _index
 	sta     _index2
-L0028:	lda     _index
+L002A:	lda     _index
 	cmp     #$10
-	bcs     L0029
+	jcs     L002B
 ;
 ; mound_x[index] = 0;
 ;
@@ -5127,7 +5282,7 @@ L0028:	lda     _index
 ;
 	lda     _temp1
 	cmp     #$FF
-	beq     L0029
+	beq     L002B
 ;
 ; ++index2;
 ;
@@ -5179,17 +5334,37 @@ L0028:	lda     _index
 ;
 	inc     _index2
 ;
+; temp1 = pointer[index2];
+;
+	lda     _pointer
+	ldx     _pointer+1
+	ldy     _index2
+	sta     ptr1
+	stx     ptr1+1
+	lda     (ptr1),y
+	sta     _temp1
+;
+; spr_type[index]=temp1;
+;
+	ldy     _index
+	lda     _temp1
+	sta     _spr_type,y
+;
+; ++index2;
+;
+	inc     _index2
+;
 ; for(index = 0,index2 = 0;index < MAX_MOUNDS; ++index){
 ;
 	inc     _index
-	jmp     L0028
+	jmp     L002A
 ;
 ; for(++index;index < MAX_MOUNDS; ++index){
 ;
-L0029:	inc     _index
+L002B:	inc     _index
 	lda     _index
 	cmp     #$10
-	bcs     L000D
+	bcs     L000E
 ;
 ; mound_y[index] = TURN_OFF;
 ;
@@ -5199,11 +5374,11 @@ L0029:	inc     _index
 ;
 ; for(++index;index < MAX_MOUNDS; ++index){
 ;
-	jmp     L0029
+	jmp     L002B
 ;
 ; pointer = level_1_enemies;
 ;
-L000D:	lda     #>(_level_1_enemies)
+L000E:	lda     #>(_level_1_enemies)
 	sta     _pointer+1
 	lda     #<(_level_1_enemies)
 	sta     _pointer
@@ -5213,9 +5388,9 @@ L000D:	lda     #>(_level_1_enemies)
 	lda     #$00
 	sta     _index
 	sta     _index2
-L002A:	lda     _index
+L002C:	lda     _index
 	cmp     #$11
-	bcs     L002B
+	bcs     L002D
 ;
 ; enemy_x[index] = 0;
 ;
@@ -5243,7 +5418,7 @@ L002A:	lda     _index
 ;
 	lda     _temp1
 	cmp     #$FF
-	beq     L002B
+	beq     L002D
 ;
 ; ++index2;
 ;
@@ -5298,14 +5473,14 @@ L002A:	lda     _index
 ; for(index = 0,index2 = 0;index < MAX_ENEMY; ++index){
 ;
 	inc     _index
-	jmp     L002A
+	jmp     L002C
 ;
 ; for(++index;index < MAX_ENEMY; ++index){
 ;
-L002B:	inc     _index
+L002D:	inc     _index
 	lda     _index
 	cmp     #$11
-	bcs     L001C
+	bcs     L001D
 ;
 ; enemy_y[index] = TURN_OFF;
 ;
@@ -5315,11 +5490,11 @@ L002B:	inc     _index
 ;
 ; for(++index;index < MAX_ENEMY; ++index){
 ;
-	jmp     L002B
+	jmp     L002D
 ;
 ; }
 ;
-L001C:	rts
+L001D:	rts
 
 .endproc
 
@@ -5471,6 +5646,233 @@ L0019:	inc     _index
 .endproc
 
 ; ---------------------------------------------------------------
+; void __near__ sprite_collisions (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_sprite_collisions: near
+
+.segment	"CODE"
+
+;
+; Generic.x = high_byte(sball.x);
+;
+	lda     _sball+1
+	sta     _Generic
+;
+; Generic.y = high_byte(sball.y);
+;
+	lda     _sball+3
+	sta     _Generic+1
+;
+; if(lives<4){
+;
+	lda     _lives
+	cmp     #$04
+	bcs     L0021
+;
+; Generic.width = HERO_WIDTH_SMALL;
+;
+	lda     #$02
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT_SMALL;
+;
+	lda     #$01
+;
+; else{
+;
+	jmp     L001F
+;
+; Generic.width = HERO_WIDTH;
+;
+L0021:	lda     #$05
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT;
+;
+L001F:	sta     _Generic+3
+;
+; for(index = 0; index < MAX_MOUNDS; ++index){
+;
+	lda     #$00
+	sta     _index
+L0022:	lda     _index
+	cmp     #$10
+	bcs     L0025
+;
+; if(mound_active[index]){
+;
+	ldy     _index
+	lda     _mound_active,y
+	beq     L0024
+;
+; if(spr_type[index] == MOUNDS){
+;
+	ldy     _index
+	lda     _spr_type,y
+	bne     L0023
+;
+; Generic2.width = mound_WIDTH;
+;
+	lda     #$07
+	sta     _Generic2+2
+;
+; Generic2.height = mound_HEIGHT;
+;
+	lda     #$0B
+;
+; else{
+;
+	jmp     L0020
+;
+; Generic2.width = END_WIDTH;
+;
+L0023:	lda     #$64
+	sta     _Generic2+2
+;
+; Generic2.height = END_HEIGHT;
+;
+L0020:	sta     _Generic2+3
+;
+; Generic2.x = mound_x[index];
+;
+	ldy     _index
+	lda     _mound_x,y
+	sta     _Generic2
+;
+; Generic2.y = mound_y[index];
+;
+	ldy     _index
+	lda     _mound_y,y
+	sta     _Generic2+1
+;
+; if(check_collision(&Generic, &Generic2)){
+;
+	lda     #<(_Generic)
+	ldx     #>(_Generic)
+	jsr     pushax
+	lda     #<(_Generic2)
+	ldx     #>(_Generic2)
+	jsr     _check_collision
+	tax
+	beq     L0024
+;
+; mound_y[index] = TURN_OFF;
+;
+	ldy     _index
+	lda     #$FF
+	sta     _mound_y,y
+;
+; ++lives;
+;
+	inc     _lives
+;
+; sfx_play(SFX_DING, 0);
+;
+	lda     #$01
+	jsr     pusha
+	lda     #$00
+	jsr     _sfx_play
+;
+; if(spr_type[index] == END){ changemode++;}
+;
+	ldy     _index
+	lda     _spr_type,y
+	cmp     #$01
+	bne     L0024
+	inc     _changemode
+;
+; for(index = 0; index < MAX_MOUNDS; ++index){
+;
+L0024:	inc     _index
+	jmp     L0022
+;
+; Generic2.width = ENEMY_WIDTH;
+;
+L0025:	lda     #$0D
+	sta     _Generic2+2
+;
+; Generic2.height = ENEMY_HEIGHT;
+;
+	sta     _Generic2+3
+;
+; for(index = 0; index < MAX_ENEMY; ++index){
+;
+	lda     #$00
+	sta     _index
+L0026:	lda     _index
+	cmp     #$11
+	bcs     L0014
+;
+; if(enemy_active[index]){
+;
+	ldy     _index
+	lda     _enemy_active,y
+	beq     L0027
+;
+; Generic2.x = enemy_x[index];
+;
+	ldy     _index
+	lda     _enemy_x,y
+	sta     _Generic2
+;
+; Generic2.y = enemy_y[index];
+;
+	ldy     _index
+	lda     _enemy_y,y
+	sta     _Generic2+1
+;
+; if(check_collision(&Generic, &Generic2)){
+;
+	lda     #<(_Generic)
+	ldx     #>(_Generic)
+	jsr     pushax
+	lda     #<(_Generic2)
+	ldx     #>(_Generic2)
+	jsr     _check_collision
+	tax
+	beq     L0027
+;
+; enemy_y[index] = TURN_OFF;
+;
+	ldy     _index
+	lda     #$FF
+	sta     _enemy_y,y
+;
+; enemy_active[index] = 0;
+;
+	ldy     _index
+	lda     #$00
+	sta     _enemy_active,y
+;
+; lives = lives -1;
+;
+	lda     _lives
+	sec
+	sbc     #$01
+	sta     _lives
+;
+; sfx_play(SFX_NOISE, 0);
+;
+	lda     #$02
+	jsr     pusha
+	lda     #$00
+	jsr     _sfx_play
+;
+; for(index = 0; index < MAX_ENEMY; ++index){
+;
+L0027:	inc     _index
+	jmp     L0026
+;
+; }
+;
+L0014:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
 ; void __near__ main (void)
 ; ---------------------------------------------------------------
 
@@ -5519,10 +5921,6 @@ L0019:	inc     _index
 ;
 	jsr     _clear_vram_buffer
 ;
-; load_room();
-;
-	jsr     _load_room
-;
 ; scroll_y = 0xff;
 ;
 	ldx     #$00
@@ -5530,17 +5928,9 @@ L0019:	inc     _index
 	sta     _scroll_y
 	stx     _scroll_y+1
 ;
-; set_scroll_y(scroll_y); // shift the bg down 1 pixel
+; while(mode == TITLE)
 ;
-	jsr     _set_scroll_y
-;
-; ppu_on_all();
-;
-	jsr     _ppu_on_all
-;
-; while(lives > 0 && game_end == 0)
-;
-	jmp     L0007
+	jmp     L001B
 ;
 ; ppu_wait_nmi(); // wait till beginning of the frame
 ;
@@ -5552,7 +5942,60 @@ L0005:	jsr     _ppu_wait_nmi
 	jsr     _pad_poll
 	sta     _pad1
 ;
-; clear_vram_buffer(); // do at the beginning of each frame
+; if(pad1 & PAD_START){
+;
+	and     #$10
+	beq     L0017
+;
+; ppu_off();
+;
+	jsr     _ppu_off
+;
+; load_room();
+;
+	jsr     _load_room
+;
+; mode = PLAY;
+;
+	lda     #$01
+	sta     _mode
+;
+; set_scroll_x(scroll_x);
+;
+	lda     _scroll_x
+	ldx     _scroll_x+1
+	jsr     _set_scroll_x
+;
+; set_scroll_y(scroll_y);
+;
+	lda     _scroll_y
+	ldx     _scroll_y+1
+L001B:	jsr     _set_scroll_y
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; while(mode == TITLE)
+;
+L0017:	lda     _mode
+	beq     L0005
+;
+; while(mode==PLAY){
+;
+	jmp     L0018
+;
+; ppu_wait_nmi();
+;
+L0009:	jsr     _ppu_wait_nmi
+;
+; pad1 = pad_poll(0);
+;
+	lda     #$00
+	jsr     _pad_poll
+	sta     _pad1
+;
+; clear_vram_buffer();
 ;
 	jsr     _clear_vram_buffer
 ;
@@ -5563,6 +6006,10 @@ L0005:	jsr     _ppu_wait_nmi
 ; check_spr_objects();
 ;
 	jsr     _check_spr_objects
+;
+; sprite_collisions();
+;
+	jsr     _sprite_collisions
 ;
 ; skier_move();
 ;
@@ -5588,48 +6035,123 @@ L0005:	jsr     _ppu_wait_nmi
 ;
 	jsr     _draw_sprites
 ;
-; while(lives > 0 && game_end == 0)
+; if(lives == 0){
 ;
-L0007:	lda     _lives
-	beq     L0011
-	lda     _game_end
-	beq     L0005
+	lda     _lives
+	bne     L000C
 ;
-; if (lives > 0) {
+; mode = SWITCH;
 ;
-L0011:	lda     _lives
-	beq     L0012
+	lda     #$03
+	sta     _mode
+;
+; if(changemode){
+;
+L000C:	lda     _changemode
+	beq     L0018
+;
+; mode = SWITCH;
+;
+	lda     #$03
+	sta     _mode
+;
+; changemode =0;
+;
+	lda     #$00
+	sta     _changemode
+;
+; while(mode==PLAY){
+;
+L0018:	lda     _mode
+	cmp     #$01
+	beq     L0009
+;
+; while(mode ==SWITCH){
+;
+	jmp     L0019
+;
+; ppu_wait_nmi();
+;
+L000E:	jsr     _ppu_wait_nmi
+;
+; set_scroll_x(scroll_x);
+;
+	lda     _scroll_x
+	ldx     _scroll_x+1
+	jsr     _set_scroll_x
+;
+; mode = FINISH;
+;
+	lda     #$02
+	sta     _mode
+;
+; vram_adr(NAMETABLE_A);
+;
+	ldx     #$20
+	lda     #$00
+	jsr     _vram_adr
+;
+; vram_fill(0,1024);
+;
+	lda     #$00
+	jsr     pusha
+	ldx     #$04
+	jsr     _vram_fill
+;
+; ppu_on_all();
+;
+	jsr     _ppu_on_all
+;
+; while(mode ==SWITCH){
+;
+L0019:	lda     _mode
+	cmp     #$03
+	beq     L000E
+;
+; while(mode == FINISH){
+;
+	jmp     L001A
+;
+; ppu_wait_nmi();
+;
+L0011:	jsr     _ppu_wait_nmi
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; clear_vram_buffer();
+;
+	jsr     _clear_vram_buffer
+;
+; music_stop();
+;
+	jsr     _music_stop
+;
+; if(lives>4){
+;
+	lda     _lives
+	cmp     #$05
+	bcc     L0014
 ;
 ; show_win_screen();
 ;
 	jsr     _show_win_screen
 ;
-; game_end = 1;
+; else{show_lose_screen();}
 ;
-	lda     #$01
-	sta     _game_end
+	jmp     L001A
+L0014:	jsr     _show_lose_screen
 ;
-; if (lives == 0) {
+; while(mode == FINISH){
 ;
-L0012:	lda     _lives
-	bne     L0003
+L001A:	lda     _mode
+	cmp     #$02
+	beq     L0011
 ;
-; show_lose_screen();
+; while(1){
 ;
-	jsr     _show_lose_screen
-;
-; game_end = 1;
-;
-	lda     #$01
-	sta     _game_end
-;
-; break;
-;
-	rts
-;
-; }
-;
-L0003:	rts
+	jmp     L0017
 
 .endproc
 
